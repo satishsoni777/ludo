@@ -8,8 +8,8 @@ class RedPlayer extends StatelessWidget {
      Widget _circle({Color color}) {
       return Container(
         margin: EdgeInsets.all(5),
-        height: 30,
-        width: 30,
+         height: 25,
+        width: 25,
         decoration: BoxDecoration(
             border: Border.all(color: Colors.black45),
             color: colorCode,

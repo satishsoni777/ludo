@@ -26,7 +26,7 @@ class DrawTriangle extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print(size);
+    // print(size);
     var path = Path();
     path.moveTo(size.width / 2, size.width / 2);
     path.lineTo(0, size.height);
