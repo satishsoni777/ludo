@@ -46,7 +46,7 @@ class _RedTravelingState extends State<RedTraveling> {
           decoration: BoxDecoration(
               color: Colors.red,
               border: Border.all(color: Colors.black38, width: .5)),
-          // child: Text('$index1,$index2'),
+          child: Text('$index1,$index2'),
         );
       } else if (index1 == 2 && index2 == 2 && playerCode == PlayerCode.RED) {
         return Container(
@@ -62,7 +62,7 @@ class _RedTravelingState extends State<RedTraveling> {
                   color: Colors.black38,
                   size: (c.maxWidth / 6) * .8,
                 ),
-                // Text('$index1, $index2')
+                Text('$index1, $index2')
               ],
             ));
       } else
@@ -71,7 +71,7 @@ class _RedTravelingState extends State<RedTraveling> {
             height: c.maxHeight /3,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black38, width: .5)),
-            // child: Text('$index1, $index2'),
+            child: Text('$index1, $index2'),
             
             );
     }

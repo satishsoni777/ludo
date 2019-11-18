@@ -8,7 +8,6 @@ class GreenPath {
   GreenPath({this.index1, this.index2, this.playerCode = PlayerCode.GREEN});
 }
 
-final pathMap = <int>[];
 
 class GreenTraveling extends StatefulWidget {
   @override
@@ -48,7 +47,7 @@ class _GreenTravelingState extends State<GreenTraveling> {
           decoration: BoxDecoration(
               color: Colors.green,
               border: Border.all(color: Colors.black38, width: .5)),
-          // child: Text('$index1,$index2'),
+          child: Text('$index1,$index2'),
         );
       } else if (index1 == 3 && index2 == 2 && playerCode == PlayerCode.GREEN) {
         return Container(
@@ -64,7 +63,7 @@ class _GreenTravelingState extends State<GreenTraveling> {
                   color: Colors.black38,
                   size: (c.maxWidth / 3) * .8,
                 ),
-                // Text('$index1, $index2'),
+                Text('$index1, $index2'),
               ],
             ));
       } else
@@ -73,7 +72,7 @@ class _GreenTravelingState extends State<GreenTraveling> {
             height: c.maxHeight / 6,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black38, width: .5)),
-            // child: Text('$index1, $index2'),
+            child: Text('$index1, $index2'),
             
             );
     }

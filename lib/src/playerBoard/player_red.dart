@@ -5,7 +5,7 @@ class RedPlayer extends StatelessWidget {
   RedPlayer({this.colorCode});
  @override
   Widget build(BuildContext context) {
-     Widget _circle({Color color}) {
+     Widget circle({Color color}) {
       return Container(
         margin: EdgeInsets.all(5),
          height: 25,
@@ -47,16 +47,16 @@ class RedPlayer extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                   _circle(),
-                 _circle(),
+                   circle(),
+                 circle(),
                 ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                 _circle(),
-                 _circle(),
+                 circle(),
+                 circle(),
                 ],
               ),
             ],

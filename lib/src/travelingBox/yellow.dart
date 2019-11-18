@@ -46,7 +46,7 @@ class _YellowTravelingState extends State<YellowTraveling> {
           decoration: BoxDecoration(
               color: Colors.yellow,
               border: Border.all(color: Colors.black38, width: .5)),
-          // child: Text('$index1,$index2'),
+          child: Text('$index1,$index2'),
         );
       } else if (index1 == 0 &&
           index2 == 3 &&
@@ -64,7 +64,7 @@ class _YellowTravelingState extends State<YellowTraveling> {
                   color: Colors.black38,
                   size: (c.maxWidth / 6) * .8,
                 ),
-                // Text('$index1, $index2')
+                Text('$index1, $index2')
               ],
             ));
       } else
@@ -73,7 +73,7 @@ class _YellowTravelingState extends State<YellowTraveling> {
             height: c.maxHeight / 3,
             decoration: BoxDecoration(
                 border: Border.all(color: Colors.black38, width: .5)),
-            // child: Text('$index1, $index2'),
+            child: Text('$index1, $index2'),
             
             );
     }

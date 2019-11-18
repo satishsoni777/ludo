@@ -3,13 +3,14 @@ import 'package:ludo_game/src/playerBoard/player.green.dart';
 import 'package:ludo_game/src/playerBoard/player_blue.dart';
 import 'package:ludo_game/src/playerBoard/player_red.dart';
 import 'package:ludo_game/src/playerBoard/player_yellow.dart';
+import 'package:ludo_game/src/state/models/state_model.dart';
 import 'package:ludo_game/src/travelingBox/blue_traveling.dart';
 import 'package:ludo_game/src/travelingBox/green.dart';
 import 'package:ludo_game/src/travelingBox/red_traveling.dart';
 import 'package:ludo_game/src/travelingBox/yellow.dart';
 import 'package:ludo_game/src/triangle_box.dart';
-// import 'package:gif_ani/gif_ani.dart';
 import 'package:flutter_gifimage/flutter_gifimage.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class GamePlayScreen extends StatefulWidget {
   @override
@@ -17,24 +18,14 @@ class GamePlayScreen extends StatefulWidget {
 }
 
 class _GamePlayScreenState extends State<GamePlayScreen>
-    with SingleTickerProviderStateMixin {
-  GifController _animationCtrl;
-  GifController _animationCtrl1;
-  GifController _animationCtrl2;
-  GifController _animationCtrl3;
+    with TickerProviderStateMixin {
+  List<bool> _diceAnimation = [];
   @override
-  void initState() {
-    _animationCtrl = new GifController(
-      vsync: this,
-      duration: new Duration(milliseconds: 2000),
-    );
+  initState() {
+    for (int i = 0; i < 4; i++) {
+      _diceAnimation.add(false);
+    }
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    _animationCtrl.dispose();
-    super.dispose();
   }
 
   @override
@@ -56,7 +47,6 @@ class _GamePlayScreenState extends State<GamePlayScreen>
             height: 10,
           ),
           Container(
-            color: Colors.red,
             height: 65,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,57 +57,21 @@ class _GamePlayScreenState extends State<GamePlayScreen>
                     SizedBox(
                       width: 20,
                     ),
-                    InkWell(
-                      onTap: () async {
-                        setState(() {
-                          _animationCtrl.repeat(
-                              min: 0,
-                              max: 11,
-                              period: Duration(milliseconds: 400));
-                        });
-
-                        await Future.delayed(Duration(seconds: 1), () {
-                          //  _animationCtrl.stop();
-                          print('adsd');
-                          print(_animationCtrl.duration);
-                          _animationCtrl.animateTo(6,
-                              curve: Curves.ease,
-                              duration: Duration(seconds: 0));
-                        });
-                      },
-                      child: GifImage(
-                        image: AssetImage('assets/dice_play.gif'),
-                        controller: _animationCtrl,
-                      ),
+                    DiceAnimaton(
+                      animation: new GifController(
+                          vsync: this,
+                          animationBehavior: AnimationBehavior.normal,
+                          duration: Duration(seconds: 1)),
                     ),
-                    // Image.asset(
-                    //   'assets/dice_play.gif',
-                    //   width: 50,
-                    // ),
                   ],
                 ),
                 Row(
                   children: <Widget>[
-                    InkWell(
-                      onTap: () async {
-                        setState(() {
-                          _animationCtrl.repeat(
-                              min: 0,
-                              max: 11,
-                              period: Duration(milliseconds: 400));
-                        });
-
-                        await Future.delayed(Duration(seconds: 1), () {
-                          //  _animationCtrl.stop();
-                          _animationCtrl.animateTo(6,
-                              curve: Curves.ease,
-                              duration: Duration(seconds: 0));
-                        });
-                      },
-                      child: GifImage(
-                        image: AssetImage('assets/dice_play.gif'),
-                        controller: _animationCtrl,
-                      ),
+                    DiceAnimaton(
+                      animation: new GifController(
+                          vsync: this,
+                          animationBehavior: AnimationBehavior.normal,
+                          duration: Duration(seconds: 1)),
                     ),
                     SizedBox(
                       width: 20,
@@ -193,7 +147,6 @@ class _GamePlayScreenState extends State<GamePlayScreen>
             height: 10,
           ),
           Container(
-            color: Colors.red,
             height: 65,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -204,51 +157,22 @@ class _GamePlayScreenState extends State<GamePlayScreen>
                     SizedBox(
                       width: 20,
                     ),
-                    InkWell(
-                      onTap: () async {
-                        setState(() {
-                          _animationCtrl.repeat(
-                              min: 0,
-                              max: 6,
-                              period: Duration(milliseconds: 400));
-                        });
-
-                        await Future.delayed(Duration(seconds: 1), () {
-                          //  _animationCtrl.stop();
-                          _animationCtrl.animateTo(6,
-                              curve: Curves.ease,
-                              duration: Duration(seconds: 0));
-                        });
-                      },
-                      child: GifImage(
-                        image: AssetImage('assets/dice_play.gif'),
-                        controller: _animationCtrl,
-                      ),
+                    DiceAnimaton(
+                      animation: new GifController(
+                          vsync: this,
+                          value: 10,
+                          animationBehavior: AnimationBehavior.normal,
+                          duration: Duration(seconds: 1)),
                     ),
                   ],
                 ),
                 Row(
                   children: <Widget>[
-                    InkWell(
-                      onTap: () async {
-                        setState(() {
-                          _animationCtrl.repeat(
-                              min: 0,
-                              max: 11,
-                              period: Duration(milliseconds: 400));
-                        });
-
-                        await Future.delayed(Duration(seconds: 1), () {
-                          //  _animationCtrl.stop();
-                          _animationCtrl.animateTo(6,
-                              curve: Curves.ease,
-                              duration: Duration(seconds: 0));
-                        });
-                      },
-                      child: GifImage(
-                        image: AssetImage('assets/dice_play.gif'),
-                        controller: _animationCtrl,
-                      ),
+                    DiceAnimaton(
+                      animation: new GifController(
+                          vsync: this,
+                          animationBehavior: AnimationBehavior.normal,
+                          duration: Duration(seconds: 1)),
                     ),
                     SizedBox(
                       width: 20,
@@ -264,15 +188,54 @@ class _GamePlayScreenState extends State<GamePlayScreen>
     );
   }
 }
-class DiceAnimaton extends StatefulWidget{
+
+class DiceAnimaton extends StatefulWidget {
+  final GifController animation;
+  DiceAnimaton({this.animation});
   @override
   _DiceAnimatonState createState() => _DiceAnimatonState();
 }
 
 class _DiceAnimatonState extends State<DiceAnimaton> {
+  GifController gifController;
+  Map<double, int> _diceNumber = {
+    1.0: 1,
+    2: 2,
+    4.0: 4,
+    7.0: 6,
+    8.0: 8,
+    10.0: 10
+  };
+  @override
+  void initState() {
+    gifController = widget.animation;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    gifController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    return null;
+    return InkWell(
+      onTap: () async {
+        final list = _diceNumber.keys.toList();
+        list.shuffle();
+        print(list);
+        gifController.repeat(
+            min: 1, max: 6, period: Duration(milliseconds: 250));
+        await Future.delayed(Duration(seconds: 1), () {
+          gifController.animateTo(list[0],
+              curve: Curves.ease, duration: Duration(seconds: 0));
+        });
+      },
+      child: GifImage(
+        image: AssetImage('assets/dice_play.gif'),
+        controller: gifController,
+      ),
+    );
   }
 }

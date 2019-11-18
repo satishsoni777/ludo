@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ludo_game/src/state/game_logic.dart';
+import 'package:ludo_game/src/state/models/state_model.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import 'game_playscreen.dart';
 
@@ -11,6 +14,15 @@ class _HomeScreenState extends State<HomeScreen> {
   Player _player;
 
   bool isSelected = false;
+  GameLogic gameLogic;
+  @override
+  void initState() {
+    gameLogic = GameLogic();
+    ScopedModel.of<StateModel>(context).gameLogic = this.gameLogic;
+    print(gameLogic.nodeLocation);
+    print(gameLogic.nodeLocation.length);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
