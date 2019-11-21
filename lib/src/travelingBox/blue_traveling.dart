@@ -39,37 +39,40 @@ class _BlueTravelingState extends State<BlueTraveling> {
 
   _init() {
     bluePath.addAll([
-      BluePath(index1: 1, index2: 2, playerCode: PlayerCode.EMPTY),
-      BluePath(index1: 1, index2: 1, playerCode: PlayerCode.EMPTY),
-      BluePath(index1: 2, index2: 1, playerCode: PlayerCode.EMPTY),
-      BluePath(index1: 3, index2: 1, playerCode: PlayerCode.EMPTY),
-      BluePath(index1: 4, index2: 1, playerCode: PlayerCode.EMPTY),
-      BluePath(index1: 5, index2: 1, playerCode: PlayerCode.EMPTY),
+      BluePath(index1: 1, index2: 2, playerCode: PlayerCode.BLUE),
+      BluePath(index1: 1, index2: 1, playerCode: PlayerCode.BLUE),
+      BluePath(index1: 2, index2: 1, playerCode: PlayerCode.BLUE),
+      BluePath(index1: 3, index2: 1, playerCode: PlayerCode.BLUE),
+      BluePath(index1: 4, index2: 1, playerCode: PlayerCode.BLUE),
+      BluePath(index1: 5, index2: 1, playerCode: PlayerCode.BLUE),
     ]);
     for (int index1 = 0; index1 < 6; index1++) {
       for (int index2 = 0; index2 < 3; index2++) {
         blueTravelingPath.add(BlueTravelingPath(
-          index1: count,
+          index1: index1,
           index2: index2,
         ));
         count++;
       }
     }
+    count = 0;
   }
 
   Widget _moveCircle(int index1, int index2, PlayerCode playerCode) {
+    print(playerCode);
     final model =
         ScopedModel.of<StateModel>(context).currentLocationBlueToken[1];
-    if (playerCode == PlayerCode.BLUE)
+    final yModel =
+        ScopedModel.of<StateModel>(context).currentLocationYellowToken[1];
+    if (((model.playerCode == playerCode) ||
+            (model.playerCode == playerCode)) &&
+        (model.index1 == index1) &&
+        (model.index2 == index2))
       return BlueToken();
-    else if (playerCode == PlayerCode.YELLOW)
+    else if (((yModel.playerCode == playerCode)) &&
+        (yModel.index1 == index1) &&
+        (yModel.index2 == index2))
       return YellowToken();
-    else if (playerCode == PlayerCode.GREEN &&
-        model.index1 == index1 &&
-        model.index2 == index2)
-      return GreenToken();
-    else if (playerCode == PlayerCode.RED)
-      return RedToken();
     else
       return Container();
   }
@@ -150,10 +153,7 @@ class _BlueTravelingState extends State<BlueTraveling> {
                     count++;
                     // return Text('');
                     return _build(
-                        model.blueTravelingPath[index1].index1,
-                        model.blueTravelingPath[index2].index2,
-                        c,
-                        blueTravelingPath[count].playerCode);
+                        index1, index2, c, blueTravelingPath[count].playerCode);
                   }, growable: false),
                 );
               }, growable: false),

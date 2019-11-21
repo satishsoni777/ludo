@@ -221,16 +221,27 @@ class _DiceAnimatonState extends State<DiceAnimaton> {
   @override
   Widget build(BuildContext context) {
     final model = ScopedModel.of<StateModel>(context);
+    // print(model.currentLocationBlueToken[0].index1);
     return InkWell(
       onTap: () async {
         final list = _diceNumber.keys.toList();
+        final testList = [1, 6];
+
+        testList.shuffle();
         list.shuffle();
-        print(model.currentLocationBlueToken[1].index1);
-        print(model.currentLocationBlueToken[1].playerCode);
         gifController.repeat(
             min: 1, max: 6, period: Duration(milliseconds: 250));
         await Future.delayed(Duration(seconds: 1), () {
-          model.moveForBlue(1, currentLocation: model.currentLocationBlueToken[1]);
+          print(testList[1]);
+          // model.moveForBlue(
+          //   testList[1],
+          //   currentLocation: model.currentLocationBlueToken.values.toList()[0],
+          //   blueTokenId: 1,
+          // );
+          model.moveForYellow( testList[1],
+          yellowTokenId: 1,
+          currentLocation: model.currentLocationYellowToken.values.toList()[0]
+          );
           gifController.animateTo(list[0],
               curve: Curves.ease, duration: Duration(seconds: 0));
         });

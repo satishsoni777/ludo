@@ -55,21 +55,24 @@ class _YellowTravelingState extends State<YellowTraveling> {
   }
 
   Widget moveTokens(int index1, int index2, PlayerCode playerCode) {
-    final blueModel =
+    final model =
         ScopedModel.of<StateModel>(context).currentLocationBlueToken[1];
-    final yellowModel =
+    final yModel =
         ScopedModel.of<StateModel>(context).currentLocationYellowToken[1];
-    // final greenModel = ScopedModel.of<StateModel>(context).currentLocationGreenToken[3];
-    // final redModel = ScopedModel.of<StateModel>(context).currentLocationRedToken[4];
-    if (blueModel.playerCode == PlayerCode.BLUE)
+    if (((model.playerCode == playerCode)) &&
+        (model.index1 == index1) &&
+        (model.index2 == index2))
       return BlueToken();
-    else if (blueModel.playerCode == PlayerCode.YELLOW)
-      return YellowToken();
-    else if (blueModel.playerCode == PlayerCode.GREEN)
-      return GreenToken();
-    else if (blueModel.playerCode == PlayerCode.RED) 
-    return RedToken();
-    else
+    else if (((yModel.playerCode == playerCode)) &&
+        (yModel.index1 == index1) &&
+        (yModel.index2 == index2)) return YellowToken();
+    // else if (playerCode == PlayerCode.GREEN &&
+    //     model.index1 == index1 &&
+    //     model.index2 == index2)
+    //   return GreenToken();
+    // else if (playerCode == PlayerCode.RED)
+    //   return RedToken();
+    // else
     return Container();
   }
 
@@ -78,9 +81,7 @@ class _YellowTravelingState extends State<YellowTraveling> {
     Widget _build(int index1, int index2, c, PlayerCode playerCode) {
       bool paintIt = false;
       for (YellowPath b in yellowPath) {
-        if (b.index1 == index1 &&
-            b.index2 == index2 &&
-            b.playerCode == playerCode) {
+        if (b.index1 == index1 && b.index2 == index2) {
           paintIt = true;
         }
       }
@@ -147,10 +148,7 @@ class _YellowTravelingState extends State<YellowTraveling> {
               count++;
               return Row(
                 children: List<Widget>.generate(6, (index2) {
-                  return _build(
-                      model.yellowTravelingPath[index1].index1,
-                      model.yellowTravelingPath[index2].index2,
-                      c,
+                  return _build(index1, index2, c,
                       model.yellowTravelingPath[count].playerCode);
                 }),
               );

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:ludo_game/src/traveling_paths/blue_traveling_path.dart';
 
 import 'game_playscreen.dart';
 
@@ -11,6 +12,16 @@ class _HomeScreenState extends State<HomeScreen> {
   Player _player;
 
   bool isSelected = false;
+  int count = 0;
+  @override
+  void initState() {
+    movesForBluePath.forEach((s) {
+      movesForBluePath[count].location = count;
+      count++;
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
