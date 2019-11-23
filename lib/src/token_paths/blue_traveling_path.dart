@@ -10,7 +10,7 @@ class MoveForBlue {
     this.index1,
     this.index2,
     this.specialPosition,
-    location,
+    this.location=0,
     this.playerCode = PlayerCode.BLUE,
   });
 }
@@ -19,7 +19,7 @@ List<MoveForBlue> movesForBluePath = [
   MoveForBlue(
       index1: 1,
       index2: 2,
-      playerCode: PlayerCode.BLUEHOME,
+      playerCode: PlayerCode.BLUESTAR,
       specialPosition: [
         {PlayerCode.BLUE: 0}
       ]),

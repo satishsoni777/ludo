@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ludo_game/src/traveling_paths/blue_traveling_path.dart';
-
+import 'package:ludo_game/src/components/3dRenderObject.dart';
+import 'package:ludo_game/src/token_paths/green_travleling_path.dart';
+import 'package:ludo_game/src/token_paths/yellow_travelling.path.dart';
 import 'game_playscreen.dart';
+import 'token_paths/blue_traveling_path.dart';
+import 'token_paths/red_travleling_path.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -19,7 +22,23 @@ class _HomeScreenState extends State<HomeScreen> {
       movesForBluePath[count].location = count;
       count++;
     });
-
+    count = 0;
+    movesForYellowPath.forEach((y) {
+      movesForYellowPath[count].location = count;
+      count++;
+    });
+    count = 0;
+    movesForGreenPath.forEach((y) {
+      movesForYellowPath[count].location = count;
+      count++;
+    });
+    count = 0;
+    movesForRedPath.forEach((y) {
+      movesForYellowPath[count].location = count;
+      count++;
+    });
+    count = 0;
+    
     super.initState();
   }
 
@@ -96,7 +115,16 @@ class _HomeScreenState extends State<HomeScreen> {
                   "Start",
                   style: TextStyle(color: Colors.black),
                 ),
-              )
+              ),
+              Render3dObject(
+                zoom: 40.0,
+                size: const Size(100.0, 100.0),
+                path: "assets/dice.obj",
+                asset: true,
+                color: Colors.green,
+                onTap: () {
+                },
+              ),
             ],
           ),
         ));

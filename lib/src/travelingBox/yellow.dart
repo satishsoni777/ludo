@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:ludo_game/src/state/models/state_model.dart';
+import 'package:ludo_game/src/state/state_model.dart';
 import 'package:ludo_game/src/state/traveling_paths.dart';
 import 'package:ludo_game/src/tokens/blue.dart';
 import 'package:ludo_game/src/tokens/green.dart';
 import 'package:ludo_game/src/tokens/red.dart';
+import 'package:ludo_game/src/tokens/travleling_token.dart';
 import 'package:ludo_game/src/tokens/yellow.dart';
 import 'package:ludo_game/utils/util.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -45,10 +46,22 @@ class _YellowTravelingState extends State<YellowTraveling> {
     ]);
     for (int index1 = 0; index1 < 3; index1++) {
       for (int index2 = 0; index2 < 6; index2++) {
-        yellowTravelingPath.add(YellowTravelingPath(
-          index1: count,
-          index2: index2,
-        ));
+        if (index1 == 2 && index2 == 4)
+          yellowTravelingPath.add(YellowTravelingPath(
+              index1: count,
+              index2: index2,
+              playerCode: PlayerCode.YELLOWSTAR));
+        else if (index1 == 0 && index2 == 3) {
+          yellowTravelingPath.add(YellowTravelingPath(
+              index1: count,
+              index2: index2,
+              playerCode: PlayerCode.YELLOWSTAR));
+        } else {
+          yellowTravelingPath.add(YellowTravelingPath(
+            index1: count,
+            index2: index2,
+          ));
+        }
         count++;
       }
     }
@@ -86,18 +99,23 @@ class _YellowTravelingState extends State<YellowTraveling> {
         }
       }
       if (paintIt) {
-        return Container(
-          width: c.maxWidth / 6,
-          height: c.maxHeight / 3,
-          decoration: BoxDecoration(
-              color: Colors.yellow,
-              border: Border.all(color: Colors.black38, width: .5)),
-          child: Stack(
-            children: <Widget>[
-              Text('$index1, $index2'),
-              moveTokens(index1, index2, playerCode)
-            ],
-          ),
+        return Stack(
+          children: <Widget>[
+            Container(
+              width: c.maxWidth / 6,
+              height: c.maxHeight / 3,
+              decoration: BoxDecoration(
+                  color: yellowLightColor,
+                  border: Border.all(color: Colors.black38, width: .5)),
+              child: moveToken(
+                context,
+                index1: index1,
+                index2: index2,
+                playerCode: playerCode,
+              ),
+            ),
+            Text('$index1,$index2')
+          ],
         );
       } else if (index1 == 0 &&
           index2 == 3 &&
@@ -115,26 +133,31 @@ class _YellowTravelingState extends State<YellowTraveling> {
                   color: Colors.black38,
                   size: (c.maxWidth / 6) * .8,
                 ),
-                Stack(
-                  children: <Widget>[
-                    Text('$index1, $index2'),
-                    moveTokens(index1, index2, playerCode)
-                  ],
+                moveToken(
+                  context,
+                  index1: index1,
+                  index2: index2,
+                  playerCode: playerCode,
                 ),
+                Text('$index1,$index2')
               ],
             ));
       } else
-        return Container(
-          width: c.maxWidth / 6,
-          height: c.maxHeight / 3,
-          decoration: BoxDecoration(
-              border: Border.all(color: Colors.black38, width: .5)),
-          child: Stack(
-            children: <Widget>[
-              Text('$index1, $index2'),
-              moveTokens(index1, index2, playerCode)
-            ],
-          ),
+        return Stack(
+          children: <Widget>[
+            Container(
+                width: c.maxWidth / 6,
+                height: c.maxHeight / 3,
+                decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black38, width: .5)),
+                child: moveToken(
+                  context,
+                  index1: index1,
+                  index2: index2,
+                  playerCode: playerCode,
+                )),
+            Text('$index1,$index2')
+          ],
         );
     }
 

@@ -6,10 +6,10 @@ class TriangleBox extends StatelessWidget {
     return CustomPaint(
       child: Container(
         alignment: Alignment.center,
-        child: Icon(
-          Icons.star,
-          color: Colors.yellow[100],
-        ),
+        // child: Icon(
+        //   Icons.star,
+        //   color: Colors.yellow[100],
+        // ),
       ),
       painter: DrawTriangle(),
     );

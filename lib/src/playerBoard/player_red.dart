@@ -27,7 +27,6 @@ class RedPlayer extends StatelessWidget {
         ),
         LayoutBuilder(
           builder: (context, contr) {
-            print(contr);
             return SizedBox(
               height: contr.maxHeight * .6,
               width: contr.maxHeight * .6,

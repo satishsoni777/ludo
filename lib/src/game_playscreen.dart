@@ -3,7 +3,7 @@ import 'package:ludo_game/src/playerBoard/player.green.dart';
 import 'package:ludo_game/src/playerBoard/player_blue.dart';
 import 'package:ludo_game/src/playerBoard/player_red.dart';
 import 'package:ludo_game/src/playerBoard/player_yellow.dart';
-import 'package:ludo_game/src/state/models/state_model.dart';
+import 'package:ludo_game/src/state/state_model.dart';
 import 'package:ludo_game/src/travelingBox/blue_traveling.dart';
 import 'package:ludo_game/src/travelingBox/green.dart';
 import 'package:ludo_game/src/travelingBox/red_traveling.dart';
@@ -38,7 +38,7 @@ class _GamePlayScreenState extends State<GamePlayScreen>
         children: <Widget>[
           Container(
             height: 60,
-            decoration: BoxDecoration(color: Colors.blue),
+            // decoration: BoxDecoration(color: Colors.blue),
             child: Row(
               children: <Widget>[],
             ),
@@ -53,9 +53,8 @@ class _GamePlayScreenState extends State<GamePlayScreen>
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    CircleAvatar(),
-                    SizedBox(
-                      width: 20,
+                    CircleAvatar(
+                      maxRadius: 30,
                     ),
                     DiceAnimaton(
                       animation: new GifController(
@@ -73,10 +72,9 @@ class _GamePlayScreenState extends State<GamePlayScreen>
                           animationBehavior: AnimationBehavior.normal,
                           duration: Duration(seconds: 1)),
                     ),
-                    SizedBox(
-                      width: 20,
+                    CircleAvatar(
+                      maxRadius: 30,
                     ),
-                    CircleAvatar(),
                   ],
                 ),
               ],
@@ -118,7 +116,18 @@ class _GamePlayScreenState extends State<GamePlayScreen>
                     child: Row(
                       children: <Widget>[
                         Expanded(flex: 4, child: RedTraveling()),
-                        Expanded(flex: 2, child: TriangleBox()),
+                        Expanded(
+                            flex: 2,
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: <Widget>[
+                                TriangleBox(),
+                                // ClipRect(
+                                //   clipper: _CustomClip(),
+                                //   child: Container(),
+                                // )
+                              ],
+                            )),
                         Expanded(flex: 4, child: YellowTraveling()),
                       ],
                     ),
@@ -153,9 +162,8 @@ class _GamePlayScreenState extends State<GamePlayScreen>
               children: <Widget>[
                 Row(
                   children: <Widget>[
-                    CircleAvatar(),
-                    SizedBox(
-                      width: 20,
+                    CircleAvatar(
+                      maxRadius: 30,
                     ),
                     DiceAnimaton(
                       animation: new GifController(
@@ -168,16 +176,19 @@ class _GamePlayScreenState extends State<GamePlayScreen>
                 ),
                 Row(
                   children: <Widget>[
-                    DiceAnimaton(
-                      animation: new GifController(
-                          vsync: this,
-                          animationBehavior: AnimationBehavior.normal,
-                          duration: Duration(seconds: 1)),
+                    Stack(
+                      children: <Widget>[
+                        DiceAnimaton(
+                          animation: new GifController(
+                              vsync: this,
+                              animationBehavior: AnimationBehavior.normal,
+                              duration: Duration(seconds: 1)),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      width: 20,
+                    CircleAvatar(
+                      maxRadius: 30,
                     ),
-                    CircleAvatar(),
                   ],
                 ),
               ],
@@ -196,8 +207,11 @@ class DiceAnimaton extends StatefulWidget {
   _DiceAnimatonState createState() => _DiceAnimatonState();
 }
 
-class _DiceAnimatonState extends State<DiceAnimaton> {
+class _DiceAnimatonState extends State<DiceAnimaton>
+    with TickerProviderStateMixin {
   GifController gifController;
+  Animation<double> _animation;
+  AnimationController _animationController;
   Map<double, int> _diceNumber = {
     1.0: 1,
     2: 2,
@@ -206,9 +220,18 @@ class _DiceAnimatonState extends State<DiceAnimaton> {
     8.0: 8,
     10.0: 10
   };
+  final testList = [1, 2, 3, 4, 5, 6];
   @override
   void initState() {
     gifController = widget.animation;
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    _animation = Tween<double>(begin: 1, end: 2).animate(_animationController);
+    _animationController.addStatusListener((s) {
+      if (s == AnimationStatus.completed) {
+        _animationController.reverse();
+      }
+    });
     super.initState();
   }
 
@@ -222,34 +245,45 @@ class _DiceAnimatonState extends State<DiceAnimaton> {
   Widget build(BuildContext context) {
     final model = ScopedModel.of<StateModel>(context);
     // print(model.currentLocationBlueToken[0].index1);
-    return InkWell(
-      onTap: () async {
-        final list = _diceNumber.keys.toList();
-        final testList = [1, 6];
-
-        testList.shuffle();
-        list.shuffle();
-        gifController.repeat(
-            min: 1, max: 6, period: Duration(milliseconds: 250));
-        await Future.delayed(Duration(seconds: 1), () {
-          print(testList[1]);
-          // model.moveForBlue(
-          //   testList[1],
-          //   currentLocation: model.currentLocationBlueToken.values.toList()[0],
-          //   blueTokenId: 1,
-          // );
-          model.moveForYellow( testList[1],
-          yellowTokenId: 1,
-          currentLocation: model.currentLocationYellowToken.values.toList()[0]
-          );
-          gifController.animateTo(list[0],
-              curve: Curves.ease, duration: Duration(seconds: 0));
-        });
-      },
-      child: GifImage(
-        image: AssetImage('assets/dice_play.gif'),
-        controller: gifController,
+    return ScaleTransition(
+      scale: _animation,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 8,right: 8),
+        child: InkWell(
+          // splashColor: Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+          onTap: () async {
+            _animationController.forward();
+            testList.shuffle();
+            print(testList[0]);
+            gifController.repeat(
+                min: 1, max: 6, period: Duration(milliseconds: 250));
+            await Future.delayed(Duration(seconds: 1), () {
+              model.diceNumber = testList[0];
+              gifController.animateTo(testList[0].toDouble(),
+                  curve: Curves.ease, duration: Duration(seconds: 0));
+            });
+          },
+          child: GifImage(
+            image: AssetImage('assets/dice_play.gif'),
+            controller: gifController,
+          ),
+        ),
       ),
     );
+  }
+}
+
+class _CustomClip extends CustomClipper<Rect> {
+  @override
+  Rect getClip(Size size) {
+    // TODO: implement getClip
+    // return ;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Rect> oldClipper) {
+    // TODO: implement shouldReclip
+    return true;
   }
 }

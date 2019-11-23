@@ -19,7 +19,7 @@ List<MoveForYellow> movesForYellowPath = [
   MoveForYellow(
       index1: 2,
       index2: 4,
-      playerCode: PlayerCode.YELLOW,
+      playerCode: PlayerCode.YELLOWSTAR,
       specialPosition: [
         {PlayerCode.BLUE: 0}
       ]),
@@ -117,7 +117,7 @@ List<MoveForYellow> movesForYellowPath = [
   MoveForYellow(
       index1: 0,
       index2: 3,
-      playerCode: PlayerCode.YELLOW,
+      playerCode: PlayerCode.YELLOWSTAR,
       specialPosition: [
         {PlayerCode.BLUE: 0}
       ]),

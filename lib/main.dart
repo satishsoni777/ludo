@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ludo_game/src/home.dart';
-import 'package:ludo_game/src/state/models/state_model.dart';
+import 'package:ludo_game/src/state/state_model.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 void main() => runApp(MyApp());

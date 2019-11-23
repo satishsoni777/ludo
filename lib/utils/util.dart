@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
+
 enum PlayerCode {
+  SPECIAL_AREA,
   BLUESTAR,
   REDSTAR,
   GREENSTAR,
@@ -14,7 +17,17 @@ enum PlayerCode {
   BLUE,
   EMPTY,
 }
-final redColorCode = 1;
-final blueColorCode = 2;
-final yellowColorCode = 3;
+final redColorCode = Color(0xff560E9A);
+
+// blue
+
+final blueDarkColor=Colors.blue[600];
+final blueColorCode = Color(0xff0000A0);
+final blueLightColor=Colors.blue[300];
+
+// yellow
+final yellowLightColor=Color(0xffffff50);
+final yellowDarkColor=Colors.yellow;
+
+// red
 final greenColorCode = 4;
