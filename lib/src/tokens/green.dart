@@ -22,7 +22,7 @@ class GreenToken extends StatelessWidget {
       width: width,
       child: FlatButton(
         child: Text(''),
-        color: Colors.black,
+        color: Colors.greenAccent,
         shape: CircleBorder(side: BorderSide(color: Colors.black)),
         onPressed: () {
           if (model.playerTurn == PlayerCode.BLUE && model.diceNumber != 0)

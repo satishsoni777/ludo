@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:ludo_game/src/state/state_model.dart';
 import 'package:ludo_game/src/state/traveling_paths.dart';
 import 'package:ludo_game/src/tokens/blue.dart';
-import 'package:ludo_game/src/tokens/green.dart';
-import 'package:ludo_game/src/tokens/red.dart';
 import 'package:ludo_game/src/tokens/travleling_token.dart';
 import 'package:ludo_game/src/tokens/yellow.dart';
 import 'package:ludo_game/utils/util.dart';
@@ -30,8 +28,12 @@ class _YellowTravelingState extends State<YellowTraveling> {
   void initState() {
     stateModel = ScopedModel.of<StateModel>(context);
     _init();
-    stateModel.yellowTravelingPath = this.yellowTravelingPath;
-    stateModel.yellowPath = this.yellowPath;
+    yellowPath.map((s) {
+      ScopedModel.of<StateModel>(context).yellowPath.add(s);
+    }).toList(growable: false);
+    this.yellowTravelingPath.map((s) {
+      ScopedModel.of<StateModel>(context).yellowTravelingPath.add(s);
+    }).toList(growable: false);
     super.initState();
   }
 
@@ -48,45 +50,23 @@ class _YellowTravelingState extends State<YellowTraveling> {
       for (int index2 = 0; index2 < 6; index2++) {
         if (index1 == 2 && index2 == 4)
           yellowTravelingPath.add(YellowTravelingPath(
-              index1: count,
+              index1: index1,
               index2: index2,
               playerCode: PlayerCode.YELLOWSTAR));
         else if (index1 == 0 && index2 == 3) {
           yellowTravelingPath.add(YellowTravelingPath(
-              index1: count,
+              index1: index1,
               index2: index2,
               playerCode: PlayerCode.YELLOWSTAR));
         } else {
           yellowTravelingPath.add(YellowTravelingPath(
-            index1: count,
+            index1: index1,
             index2: index2,
           ));
         }
         count++;
       }
     }
-  }
-
-  Widget moveTokens(int index1, int index2, PlayerCode playerCode) {
-    final model =
-        ScopedModel.of<StateModel>(context).currentLocationBlueToken[1];
-    final yModel =
-        ScopedModel.of<StateModel>(context).currentLocationYellowToken[1];
-    if (((model.playerCode == playerCode)) &&
-        (model.index1 == index1) &&
-        (model.index2 == index2))
-      return BlueToken();
-    else if (((yModel.playerCode == playerCode)) &&
-        (yModel.index1 == index1) &&
-        (yModel.index2 == index2)) return YellowToken();
-    // else if (playerCode == PlayerCode.GREEN &&
-    //     model.index1 == index1 &&
-    //     model.index2 == index2)
-    //   return GreenToken();
-    // else if (playerCode == PlayerCode.RED)
-    //   return RedToken();
-    // else
-    return Container();
   }
 
   @override
@@ -118,8 +98,7 @@ class _YellowTravelingState extends State<YellowTraveling> {
           ],
         );
       } else if (index1 == 0 &&
-          index2 == 3 &&
-          playerCode == PlayerCode.YELLOW) {
+          index2 == 3 ) {
         return Container(
             width: c.maxWidth / 6,
             height: c.maxHeight / 3,
@@ -168,11 +147,11 @@ class _YellowTravelingState extends State<YellowTraveling> {
             int count = -1;
             return Column(
                 children: List<Widget>.generate(3, (index1) {
-              count++;
+             
               return Row(
-                children: List<Widget>.generate(6, (index2) {
+                children: List<Widget>.generate(6, (index2) { count++;
                   return _build(index1, index2, c,
-                      model.yellowTravelingPath[count].playerCode);
+                      yellowTravelingPath[count].playerCode);
                 }),
               );
             }));

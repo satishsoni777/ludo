@@ -59,25 +59,7 @@ class _GreenTravelingState extends State<GreenTraveling> {
     super.initState();
   }
 
-  // Widget moveTokens(int index1, int index2, PlayerCode playerCode) {
-  //   final yModel =
-  //       ScopedModel.of<StateModel>(context).currentLocationYellowToken[1];
-  //   final model =
-  //       ScopedModel.of<StateModel>(context).currentLocationBlueToken[1];
-  //   if (((model.playerCode == playerCode)) &&
-  //       (model.index1 == index1) &&
-  //       (model.index2 == index2))
-  //     return BlueToken();
-  //   // else if (playerCode == PlayerCode.YELLOW)
-  //   //   return YellowToken();
-  //   else if (((yModel.playerCode == playerCode)) &&
-  //       (yModel.index1 == index1) &&
-  //       (yModel.index2 == index2)) return YellowToken();
-  //   // else if (playerCode == PlayerCode.RED)
-  //   //   return RedToken();
-  //   // else
-  //   return Container();
-  // }
+
 
   @override
   Widget build(BuildContext context) {
@@ -85,8 +67,7 @@ class _GreenTravelingState extends State<GreenTraveling> {
       bool paintIt = false;
       for (GreenPath b in greenPath) {
         if (b.index1 == index1 &&
-            b.index2 == index2 &&
-            b.playerCode == playerCode) {
+            b.index2 == index2) {
           paintIt = true;
         }
       }
@@ -109,7 +90,7 @@ class _GreenTravelingState extends State<GreenTraveling> {
             Text('$index1,$index2')
           ],
         );
-      } else if (index1 == 3 && index2 == 2 && playerCode == PlayerCode.GREEN) {
+      } else if (index1 == 3 && index2 == 2 ) {
         return Container(
             width: c.maxWidth / 3,
             height: c.maxHeight / 6,
@@ -154,12 +135,14 @@ class _GreenTravelingState extends State<GreenTraveling> {
 
     return ScopedModelDescendant<StateModel>(
       builder: (context, c, model) {
+        int count=-1;
         return LayoutBuilder(
           builder: (context, c) {
             return Column(
                 children: List<Widget>.generate(6, (index1) {
               return Row(
                 children: List<Widget>.generate(3, (index2) {
+                  count++;
                   return _build(
                       index1, index2, c, greenTravelingPath[count].playerCode);
                 }),

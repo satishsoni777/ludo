@@ -73,8 +73,7 @@ class _RedTravelingState extends State<RedTraveling> {
       bool paintIt = false;
       for (RedPath b in redPath) {
         if (b.index1 == index1 &&
-            b.index2 == index2 &&
-            b.playerCode == playerCode) {
+            b.index2 == index2) {
           paintIt = true;
         }
       }

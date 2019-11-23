@@ -69,7 +69,7 @@ class _BlueTravelingState extends State<BlueTraveling> {
     Widget _build(
         int index1, int index2, BoxConstraints c, PlayerCode playerCode) {
       
-print('player code blue $playerCode $index1,$index2');
+// print('player code blue $playerCode $index1,$index2');
       bool paintIt = false;
       for (BluePath b in bluePath) {
         if (b.index1 == index1 && b.index2 == index2) {

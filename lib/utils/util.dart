@@ -15,6 +15,8 @@ enum PlayerCode {
   RED,
   GREEN,
   BLUE,
+  INSIDE_HOME,
+  // OUTSIDE_HOME,
   EMPTY,
 }
 final redColorCode = Color(0xff560E9A);

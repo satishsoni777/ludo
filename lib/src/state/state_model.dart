@@ -16,11 +16,13 @@ class CurrentBlueTravelingPath {
   int currentPosition;
   int tokenId;
   PlayerCode tokenName;
+  PlayerCode tokenStatus;
   CurrentBlueTravelingPath(
       {this.index1 = -1,
       this.index2 = -1,
       this.tokenName = PlayerCode.BLUE,
       this.currentPosition = -1,
+      this.tokenStatus = PlayerCode.INSIDE_HOME,
       this.tokenId,
       this.playerCode = PlayerCode.HOME});
 }
@@ -252,5 +254,7 @@ class StateModel extends Model {
     diceNumber = 0;
   }
 
-  void moveForRed() {}
+// move for red logic
+  void moveForRed(int number,
+      {CurrentRedTravelingPath currentLocation, int tokenId}) {}
 }
