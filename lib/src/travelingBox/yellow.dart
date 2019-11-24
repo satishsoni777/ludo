@@ -50,14 +50,10 @@ class _YellowTravelingState extends State<YellowTraveling> {
       for (int index2 = 0; index2 < 6; index2++) {
         if (index1 == 2 && index2 == 4)
           yellowTravelingPath.add(YellowTravelingPath(
-              index1: index1,
-              index2: index2,
-              playerCode: PlayerCode.YELLOWSTAR));
+              index1: index1, index2: index2, playerCode: PlayerCode.STAR));
         else if (index1 == 0 && index2 == 3) {
           yellowTravelingPath.add(YellowTravelingPath(
-              index1: index1,
-              index2: index2,
-              playerCode: PlayerCode.YELLOWSTAR));
+              index1: index1, index2: index2, playerCode: PlayerCode.STAR));
         } else {
           yellowTravelingPath.add(YellowTravelingPath(
             index1: index1,
@@ -72,7 +68,9 @@ class _YellowTravelingState extends State<YellowTraveling> {
   @override
   Widget build(BuildContext context) {
     Widget _build(int index1, int index2, c, PlayerCode playerCode) {
+      // print('yellow $playerCode');
       bool paintIt = false;
+      print('yellowe $index1, $index2 $playerCode');
       for (YellowPath b in yellowPath) {
         if (b.index1 == index1 && b.index2 == index2) {
           paintIt = true;
@@ -94,11 +92,10 @@ class _YellowTravelingState extends State<YellowTraveling> {
                 playerCode: playerCode,
               ),
             ),
-            Text('$index1,$index2')
+            // Text('$index1,$index2')
           ],
         );
-      } else if (index1 == 0 &&
-          index2 == 3 ) {
+      } else if (index1 == 0 && index2 == 3) {
         return Container(
             width: c.maxWidth / 6,
             height: c.maxHeight / 3,
@@ -118,7 +115,7 @@ class _YellowTravelingState extends State<YellowTraveling> {
                   index2: index2,
                   playerCode: playerCode,
                 ),
-                Text('$index1,$index2')
+                // Text('$index1,$index2')
               ],
             ));
       } else
@@ -135,7 +132,7 @@ class _YellowTravelingState extends State<YellowTraveling> {
                   index2: index2,
                   playerCode: playerCode,
                 )),
-            Text('$index1,$index2')
+            // Text('$index1,$index2')
           ],
         );
     }
@@ -147,11 +144,12 @@ class _YellowTravelingState extends State<YellowTraveling> {
             int count = -1;
             return Column(
                 children: List<Widget>.generate(3, (index1) {
-             
               return Row(
-                children: List<Widget>.generate(6, (index2) { count++;
-                  return _build(index1, index2, c,
-                      yellowTravelingPath[count].playerCode);
+                children: List<Widget>.generate(6, (index2) {
+                
+                  count++;
+                  return _build(
+                      index1, index2, c, yellowTravelingPath[count].playerCode);
                 }),
               );
             }));

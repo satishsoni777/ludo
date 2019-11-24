@@ -16,7 +16,7 @@ class RedPlayer extends StatelessWidget {
       if (currentRedTravelingPath.playerCode == PlayerCode.HOME)
         return InkWell(
           onTap: () {
-            if (model.diceNumber == 6) {}
+            if (model.diceNumber == 6)
             model.moveForRed(6,
                 tokenId: tokenId,
                 currentLocation: currentRedTravelingPath);
@@ -52,6 +52,27 @@ class RedPlayer extends StatelessWidget {
                   border: Border.all(color: Colors.black45, width: 1),
                   color: Colors.red),
             ),
+               Positioned(
+                top: 0,
+                child: Container(
+                  child: Row(
+                      children: model.currentLocationRedToken.values.map((s) {
+                    if (s.playerCode == PlayerCode.REDHOME)
+                      return Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Container(
+                          height: 25,
+                          width: 25,
+                          decoration: BoxDecoration(
+                              color: Colors.redAccent,
+                              borderRadius: BorderRadius.circular(12.5)),
+                        ),
+                      );
+                    else
+                      return Container();
+                  }).toList(growable: false)),
+                ),
+              ),
             LayoutBuilder(
               builder: (context, contr) {
                 return SizedBox(

@@ -1,5 +1,6 @@
 import 'package:ludo_game/src/state/traveling_paths.dart';
 import 'package:ludo_game/src/token_paths/green_travleling_path.dart';
+import 'package:ludo_game/src/token_paths/red_travleling_path.dart';
 import 'package:ludo_game/src/token_paths/yellow_travelling.path.dart';
 import 'package:ludo_game/src/travelingBox/blue_traveling.dart';
 import 'package:ludo_game/src/travelingBox/green.dart';
@@ -9,7 +10,9 @@ import 'package:ludo_game/src/token_paths/blue_traveling_path.dart';
 import 'package:ludo_game/utils/util.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class CurrentBlueTravelingPath {
+abstract class TokensCurrentLocation {}
+
+class CurrentBlueTravelingPath extends TokensCurrentLocation {
   int index1;
   int index2;
   PlayerCode playerCode;
@@ -27,7 +30,7 @@ class CurrentBlueTravelingPath {
       this.playerCode = PlayerCode.HOME});
 }
 
-class CurrentYellowTravelingPath {
+class CurrentYellowTravelingPath extends TokensCurrentLocation {
   int index1;
   int index2;
   PlayerCode playerCode;
@@ -43,7 +46,7 @@ class CurrentYellowTravelingPath {
       this.playerCode = PlayerCode.HOME});
 }
 
-class CurrentGreenTravelingPath {
+class CurrentGreenTravelingPath extends TokensCurrentLocation {
   int index1;
   int index2;
   PlayerCode playerCode;
@@ -59,7 +62,7 @@ class CurrentGreenTravelingPath {
       this.playerCode = PlayerCode.HOME});
 }
 
-class CurrentRedTravelingPath {
+class CurrentRedTravelingPath extends TokensCurrentLocation {
   int index1;
   int index2;
   PlayerCode playerCode;
@@ -76,6 +79,16 @@ class CurrentRedTravelingPath {
 }
 
 class StateModel extends Model {
+  StateModel() {
+    // tokensCurrentLocation.add(currentLocationBlueToken);
+
+    // tokensCurrentLocation.add(currentLocationYellowToken);
+
+    // tokensCurrentLocation.add(currentLocationGreenToken);
+
+    // tokensCurrentLocation.add(currentLocationRedToken);
+    // print('testin ${tokensCurrentLocation.length}');
+  }
   int index;
   int index1;
   int diceNumber = 0;
@@ -88,14 +101,7 @@ class StateModel extends Model {
   List<YellowTravelingPath> yellowTravelingPath = [];
   List<GreenTravelingPath> greenTravelingPath = [];
   List<RedTravelingPath> redTravelingPath = [];
-  // Map<PlayerCode, Map<int, CurrentBlueTravelingPath>> cur = {
-  //   PlayerCode.BLUE: {
-  //     1: CurrentBlueTravelingPath(tokenId: 1),
-  //     2: CurrentBlueTravelingPath(tokenId: 2),
-  //     3: CurrentBlueTravelingPath(tokenId: 3),
-  //     4: CurrentBlueTravelingPath(tokenId: 4),
-  //   }
-  // };
+
   Map<int, CurrentBlueTravelingPath> currentLocationBlueToken = {
     1: CurrentBlueTravelingPath(tokenId: 1),
     2: CurrentBlueTravelingPath(tokenId: 2),
@@ -121,17 +127,19 @@ class StateModel extends Model {
     4: CurrentRedTravelingPath(tokenId: 4),
   };
 
+  List<Map<int, TokensCurrentLocation>> tokensCurrentLocation = [];
+
   /// moves for blue token
   void moveForBlue(int number,
       {CurrentBlueTravelingPath currentLocation, int blueTokenId}) {
     if (number == 6 && currentLocation.playerCode == PlayerCode.HOME) {
       updateCurrentLocationForBlue(
           MoveForBlue(
-            index1: 1,
-            index2: 2,
-            playerCode: PlayerCode.BLUESTAR,
-            location: 0,
-          ),
+              index1: 1,
+              index2: 2,
+              playerCode: PlayerCode.STAR,
+              location: 0,
+              isSpecialPosition: true),
           tokenId: blueTokenId,
           currentLocation: 0);
     } else {
@@ -156,12 +164,21 @@ class StateModel extends Model {
 
   void updateCurrentLocationForBlue(MoveForBlue moveForBlue,
       {int currentLocation, int tokenId, PlayerCode playerCode}) {
-    currentLocationBlueToken[tokenId] = CurrentBlueTravelingPath(
+    print('plaer code $playerCode');
+    CurrentBlueTravelingPath blue = CurrentBlueTravelingPath(
         currentPosition: currentLocation,
         index1: moveForBlue.index1,
         index2: moveForBlue.index2,
         playerCode: playerCode ?? moveForBlue.playerCode,
         tokenId: tokenId);
+    currentLocationBlueToken[tokenId] = blue;
+    print(
+        'adasdsad ${moveForBlue.isSpecialPosition} ${moveForBlue.playerCode}');
+    if (moveForBlue.isSpecialPosition == false)
+      tokenKillingFromBlueToken(
+          index1: moveForBlue.index1,
+          index2: moveForBlue.index2,
+          playerCode: moveForBlue.playerCode);
     diceNumber = 0;
   }
 
@@ -173,7 +190,7 @@ class StateModel extends Model {
           MoveForYellow(
             index1: 2,
             index2: 4,
-            playerCode: PlayerCode.YELLOWSTAR,
+            playerCode: PlayerCode.STAR,
             location: 0,
           ),
           currentLocation: 0,
@@ -208,6 +225,10 @@ class StateModel extends Model {
         playerCode: playerCode ?? moveForYellow.playerCode,
         tokenId: tokenId,
         currentPosition: currentLocation);
+        tokenKillingFromYellowToken(
+          index1: moveForYellow.index1,
+          index2: moveForYellow.index2,
+          playerCode: moveForYellow.playerCode);
   }
 
   /// traveling logic for green
@@ -218,7 +239,7 @@ class StateModel extends Model {
           MoveForGreen(
             index1: 4,
             index2: 0,
-            playerCode: PlayerCode.GREENSTAR,
+            playerCode: PlayerCode.STAR,
             location: 0,
           ),
           tokenId: tokenId,
@@ -251,10 +272,173 @@ class StateModel extends Model {
         index2: moveForGreen.index2,
         playerCode: playerCode ?? moveForGreen.playerCode,
         tokenId: tokenId);
+        tokenKillingFromGreenToken(
+          index1: moveForGreen.index1,
+          index2: moveForGreen.index2,
+          playerCode: moveForGreen.playerCode);
     diceNumber = 0;
   }
 
 // move for red logic
   void moveForRed(int number,
-      {CurrentRedTravelingPath currentLocation, int tokenId}) {}
+      {CurrentRedTravelingPath currentLocation, int tokenId}) {
+    if (number == 6 && currentLocation.playerCode == PlayerCode.HOME) {
+      updateCurrentLocationForRed(
+          MoveForRed(
+            index1: 0,
+            index2: 1,
+            playerCode: PlayerCode.STAR,
+            location: 0,
+          ),
+          currentLocation: 0,
+          tokenId: tokenId);
+    } else {
+      if (currentLocation.currentPosition >= 0 &&
+          (number + currentLocation.currentPosition) < 55) {
+        updateCurrentLocationForRed(
+          movesForRedPath[currentLocation.currentPosition + number],
+          currentLocation: currentLocation.currentPosition + number,
+          tokenId: tokenId,
+        );
+      } else if (number + currentLocation.currentPosition == 56) {
+        updateCurrentLocationForRed(
+          movesForRedPath[currentLocation.currentPosition + number - 1],
+          currentLocation: currentLocation.currentPosition + number - 1,
+          playerCode: PlayerCode.REDHOME,
+          tokenId: tokenId,
+        );
+      }
+    }
+
+    diceNumber = 0;
+    notifyListeners();
+  }
+
+  void updateCurrentLocationForRed(MoveForRed move,
+      {int currentLocation, int tokenId, PlayerCode playerCode}) {
+    currentLocationRedToken[tokenId] = CurrentRedTravelingPath(
+        index1: move.index1,
+        index2: move.index2,
+        playerCode: playerCode ?? move.playerCode,
+        tokenId: tokenId,
+        currentPosition: currentLocation);
+         tokenKillingFromRedToken(
+          index1: move.index1,
+          index2: move.index2,
+          playerCode: move.playerCode);
+  }
+
+  /// blue token killing logic
+  void tokenKillingFromBlueToken({
+    int index1,
+    index2,
+    PlayerCode playerCode,
+    int tokenId,
+  }) {
+    removeYellowToken(index1: index1, index2: index2, playerCode: playerCode);
+    removeGreenToken(index1: index1, index2: index2, playerCode: playerCode);
+    removeRedToken(index1: index1, index2: index2, playerCode: playerCode);
+  }
+
+  /// yellow token killing logic
+  void tokenKillingFromYellowToken({
+    int index1,
+    index2,
+    PlayerCode playerCode,
+    int tokenId,
+  }) {
+    removeGreenToken(index1: index1, index2: index2, playerCode: playerCode);
+    removeBlueToken(index1: index1, index2: index2, playerCode: playerCode);
+    removeRedToken(index1: index1, index2: index2, playerCode: playerCode);
+  }
+
+  /// green token killing logic
+  void tokenKillingFromGreenToken({
+    int index1,
+    index2,
+    PlayerCode playerCode,
+    int tokenId,
+  }) {
+    removeYellowToken(index1: index1, index2: index2, playerCode: playerCode);
+    removeBlueToken(index1: index1, index2: index2, playerCode: playerCode);
+    removeRedToken(index1: index1, index2: index2, playerCode: playerCode);
+  }
+
+  /// red token killing logic
+
+// yellow
+  void tokenKillingFromRedToken({
+    int index1,
+    index2,
+    PlayerCode playerCode,
+    int tokenId,
+  }) {
+    removeBlueToken(index1: index1, index2: index2, playerCode: playerCode);
+    removeGreenToken(index1: index1, index2: index2, playerCode: playerCode);
+    removeYellowToken(index1: index1, index2: index2, playerCode: playerCode);
+  }
+
+  removeBlueToken({int index1, int index2, PlayerCode playerCode}) {
+    currentLocationBlueToken.forEach((k, v) {
+      if (v.index1 == index1 &&
+          v.index2 == index2 &&
+          v.playerCode == playerCode &&
+          playerCode != PlayerCode.STAR) {
+        print('trur for yellow $k');
+        currentLocationBlueToken[k] = CurrentBlueTravelingPath(
+          index1: -1,
+          index2: -1,
+          playerCode: PlayerCode.HOME,
+        );
+      }
+    });
+  }
+
+  removeYellowToken({int index1, int index2, PlayerCode playerCode}) {
+    currentLocationYellowToken.forEach((k, v) {
+      if (v.index1 == index1 &&
+          v.index2 == index2 &&
+          v.playerCode == playerCode &&
+          playerCode != PlayerCode.STAR) {
+        print('trur for yellow $k');
+        currentLocationYellowToken[k] = CurrentYellowTravelingPath(
+          index1: -1,
+          index2: -1,
+          playerCode: PlayerCode.HOME,
+        );
+      }
+    });
+  }
+
+  removeGreenToken({int index1, int index2, PlayerCode playerCode}) {
+    currentLocationGreenToken.forEach((k, v) {
+      if (v.index1 == index1 &&
+          v.index2 == index2 &&
+          v.playerCode == playerCode &&
+          playerCode != PlayerCode.STAR) {
+        print('trur for yellow $k');
+        currentLocationGreenToken[k] = CurrentGreenTravelingPath(
+          index1: -1,
+          index2: -1,
+          playerCode: PlayerCode.HOME,
+        );
+      }
+    });
+  }
+
+  removeRedToken({int index1, int index2, PlayerCode playerCode}) {
+    currentLocationRedToken.forEach((k, v) {
+      if (v.index1 == index1 &&
+          v.index2 == index2 &&
+          v.playerCode == playerCode &&
+          playerCode != PlayerCode.STAR) {
+        print('trur for yellow $k');
+        currentLocationRedToken[k] = CurrentRedTravelingPath(
+          index1: -1,
+          index2: -1,
+          playerCode: PlayerCode.HOME,
+        );
+      }
+    });
+  }
 }

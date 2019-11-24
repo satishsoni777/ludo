@@ -5,11 +5,11 @@ class MoveForGreen {
   int index2;
   PlayerCode playerCode;
   int location;
-  List<Map<PlayerCode, int>> specialPosition = [];
+  bool isSpecialPosition;
   MoveForGreen({
     this.index1,
     this.index2,
-    this.specialPosition,
+    this.isSpecialPosition = false,
     this.location = 0,
     this.playerCode = PlayerCode.GREEN,
   });
@@ -19,10 +19,8 @@ List<MoveForGreen> movesForGreenPath = [
   MoveForGreen(
       index1: 4,
       index2: 0,
-      playerCode: PlayerCode.GREENSTAR,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForGreen(
     index1: 3,
     index2: 0,
@@ -46,10 +44,8 @@ List<MoveForGreen> movesForGreenPath = [
   MoveForGreen(
       index1: 2,
       index2: 2,
-      playerCode: PlayerCode.RED,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForGreen(index1: 2, index2: 1, playerCode: PlayerCode.RED),
   MoveForGreen(index1: 2, index2: 0, playerCode: PlayerCode.RED),
   MoveForGreen(index1: 1, index2: 0, playerCode: PlayerCode.RED),
@@ -57,10 +53,8 @@ List<MoveForGreen> movesForGreenPath = [
   MoveForGreen(
       index1: 0,
       index2: 1,
-      playerCode: PlayerCode.RED,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
 
   MoveForGreen(index1: 0, index2: 2, playerCode: PlayerCode.RED),
   MoveForGreen(index1: 0, index2: 3, playerCode: PlayerCode.RED),
@@ -71,12 +65,20 @@ List<MoveForGreen> movesForGreenPath = [
   MoveForGreen(index1: 5, index2: 0, playerCode: PlayerCode.BLUE),
   MoveForGreen(index1: 4, index2: 0, playerCode: PlayerCode.BLUE),
   MoveForGreen(index1: 3, index2: 0, playerCode: PlayerCode.BLUE),
-  MoveForGreen(index1: 2, index2: 0, playerCode: PlayerCode.BLUE),
+  MoveForGreen(
+      index1: 2,
+      index2: 0,
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForGreen(index1: 1, index2: 0, playerCode: PlayerCode.BLUE),
   MoveForGreen(index1: 0, index2: 0, playerCode: PlayerCode.BLUE),
   MoveForGreen(index1: 0, index2: 1, playerCode: PlayerCode.BLUE),
   MoveForGreen(index1: 0, index2: 2, playerCode: PlayerCode.BLUE),
-  MoveForGreen(index1: 1, index2: 2, playerCode: PlayerCode.BLUE),
+  MoveForGreen(
+      index1: 1,
+      index2: 2,
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForGreen(index1: 2, index2: 2, playerCode: PlayerCode.BLUE),
   MoveForGreen(index1: 3, index2: 2, playerCode: PlayerCode.BLUE),
   MoveForGreen(index1: 4, index2: 2, playerCode: PlayerCode.BLUE),
@@ -89,10 +91,8 @@ List<MoveForGreen> movesForGreenPath = [
   MoveForGreen(
       index1: 0,
       index2: 3,
-      playerCode: PlayerCode.YELLOW,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForGreen(index1: 0, index2: 4, playerCode: PlayerCode.YELLOW),
   MoveForGreen(index1: 0, index2: 5, playerCode: PlayerCode.YELLOW),
   MoveForGreen(index1: 1, index2: 5, playerCode: PlayerCode.YELLOW),
@@ -100,10 +100,8 @@ List<MoveForGreen> movesForGreenPath = [
   MoveForGreen(
       index1: 2,
       index2: 4,
-      playerCode: PlayerCode.YELLOW,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForGreen(index1: 2, index2: 3, playerCode: PlayerCode.YELLOW),
   MoveForGreen(index1: 2, index2: 2, playerCode: PlayerCode.YELLOW),
   MoveForGreen(index1: 2, index2: 1, playerCode: PlayerCode.YELLOW),
@@ -116,22 +114,34 @@ List<MoveForGreen> movesForGreenPath = [
   MoveForGreen(
       index1: 3,
       index2: 2,
-      playerCode: PlayerCode.GREENSTAR,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForGreen(index1: 4, index2: 2, playerCode: PlayerCode.GREEN),
   MoveForGreen(index1: 5, index2: 2, playerCode: PlayerCode.GREEN),
   MoveForGreen(index1: 5, index2: 1, playerCode: PlayerCode.GREEN),
-  MoveForGreen(index1: 4, index2: 1, playerCode: PlayerCode.GREEN),
+  MoveForGreen(
+      index1: 4,
+      index2: 1,
+      playerCode: PlayerCode.GREEN,
+      isSpecialPosition: true),
   MoveForGreen(
       index1: 3,
       index2: 1,
       playerCode: PlayerCode.GREEN,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
-  MoveForGreen(index1: 2, index2: 1, playerCode: PlayerCode.GREEN),
-  MoveForGreen(index1: 1, index2: 1, playerCode: PlayerCode.GREEN),
-  MoveForGreen(index1: 0, index2: 1, playerCode: PlayerCode.GREEN),
+      isSpecialPosition: true),
+  MoveForGreen(
+      index1: 2,
+      index2: 1,
+      playerCode: PlayerCode.GREEN,
+      isSpecialPosition: true),
+  MoveForGreen(
+      index1: 1,
+      index2: 1,
+      playerCode: PlayerCode.GREEN,
+      isSpecialPosition: true),
+  MoveForGreen(
+      index1: 0,
+      index2: 1,
+      playerCode: PlayerCode.GREEN,
+      isSpecialPosition: true),
 ];

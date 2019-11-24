@@ -5,11 +5,11 @@ class MoveForRed {
   int index2;
   PlayerCode playerCode;
   int location;
-  List<Map<PlayerCode, int>> specialPosition = [];
+  bool isSpecialPosition;
   MoveForRed({
     this.index1,
     this.index2,
-    this.specialPosition,
+    this.isSpecialPosition = false,
     this.location = 0,
     this.playerCode = PlayerCode.RED,
   });
@@ -19,10 +19,8 @@ List<MoveForRed> movesForRedPath = [
   MoveForRed(
       index1: 0,
       index2: 1,
-      playerCode: PlayerCode.REDSTAR,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForRed(
     index1: 0,
     index2: 2,
@@ -44,12 +42,20 @@ List<MoveForRed> movesForRedPath = [
   MoveForRed(index1: 5, index2: 0, playerCode: PlayerCode.BLUE),
   MoveForRed(index1: 4, index2: 0, playerCode: PlayerCode.BLUE),
   MoveForRed(index1: 3, index2: 0, playerCode: PlayerCode.BLUE),
-  MoveForRed(index1: 2, index2: 0, playerCode: PlayerCode.BLUE),
+  MoveForRed(
+      index1: 2,
+      index2: 0,
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForRed(index1: 1, index2: 0, playerCode: PlayerCode.BLUE),
   MoveForRed(index1: 0, index2: 0, playerCode: PlayerCode.BLUE),
   MoveForRed(index1: 0, index2: 1, playerCode: PlayerCode.BLUE),
   MoveForRed(index1: 0, index2: 2, playerCode: PlayerCode.BLUE),
-  MoveForRed(index1: 1, index2: 2, playerCode: PlayerCode.BLUE),
+  MoveForRed(
+      index1: 1,
+      index2: 2,
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForRed(index1: 2, index2: 2, playerCode: PlayerCode.BLUE),
   MoveForRed(index1: 3, index2: 2, playerCode: PlayerCode.BLUE),
   MoveForRed(index1: 4, index2: 2, playerCode: PlayerCode.BLUE),
@@ -62,10 +68,8 @@ List<MoveForRed> movesForRedPath = [
   MoveForRed(
       index1: 0,
       index2: 3,
-      playerCode: PlayerCode.YELLOW,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForRed(index1: 0, index2: 4, playerCode: PlayerCode.YELLOW),
   MoveForRed(index1: 0, index2: 5, playerCode: PlayerCode.YELLOW),
   MoveForRed(index1: 1, index2: 5, playerCode: PlayerCode.YELLOW),
@@ -73,10 +77,8 @@ List<MoveForRed> movesForRedPath = [
   MoveForRed(
       index1: 2,
       index2: 4,
-      playerCode: PlayerCode.YELLOW,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForRed(index1: 2, index2: 3, playerCode: PlayerCode.YELLOW),
   MoveForRed(index1: 2, index2: 2, playerCode: PlayerCode.YELLOW),
   MoveForRed(index1: 2, index2: 1, playerCode: PlayerCode.YELLOW),
@@ -89,10 +91,8 @@ List<MoveForRed> movesForRedPath = [
   MoveForRed(
       index1: 3,
       index2: 2,
-      playerCode: PlayerCode.GREEN,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForRed(index1: 4, index2: 2, playerCode: PlayerCode.GREEN),
   MoveForRed(index1: 5, index2: 2, playerCode: PlayerCode.GREEN),
   MoveForRed(index1: 5, index2: 1, playerCode: PlayerCode.GREEN),
@@ -100,10 +100,8 @@ List<MoveForRed> movesForRedPath = [
   MoveForRed(
       index1: 4,
       index2: 0,
-      playerCode: PlayerCode.GREEN,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForRed(index1: 3, index2: 0, playerCode: PlayerCode.GREEN),
   MoveForRed(index1: 2, index2: 0, playerCode: PlayerCode.GREEN),
   MoveForRed(index1: 1, index2: 0, playerCode: PlayerCode.GREEN),
@@ -116,22 +114,35 @@ List<MoveForRed> movesForRedPath = [
   MoveForRed(
       index1: 2,
       index2: 2,
-      playerCode: PlayerCode.REDSTAR,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
+      playerCode: PlayerCode.STAR,
+      isSpecialPosition: true),
   MoveForRed(index1: 2, index2: 1, playerCode: PlayerCode.RED),
   MoveForRed(index1: 2, index2: 0, playerCode: PlayerCode.RED),
   MoveForRed(index1: 1, index2: 0, playerCode: PlayerCode.RED),
-  MoveForRed(index1: 1, index2: 1, playerCode: PlayerCode.RED),
-  MoveForRed(index1: 1, index2: 2, playerCode: PlayerCode.RED),
+
+  MoveForRed(
+      index1: 1,
+      index2: 1,
+      playerCode: PlayerCode.RED,
+      isSpecialPosition: true),
+  MoveForRed(
+      index1: 1,
+      index2: 2,
+      playerCode: PlayerCode.RED,
+      isSpecialPosition: true),
   MoveForRed(
       index1: 1,
       index2: 3,
-      playerCode: PlayerCode.REDSTAR,
-      specialPosition: [
-        {PlayerCode.BLUE: 0}
-      ]),
-  MoveForRed(index1: 1, index2: 4, playerCode: PlayerCode.RED),
-  MoveForRed(index1: 1, index2: 5, playerCode: PlayerCode.RED),
+      playerCode: PlayerCode.RED,
+      isSpecialPosition: true),
+  MoveForRed(
+      index1: 1,
+      index2: 4,
+      playerCode: PlayerCode.RED,
+      isSpecialPosition: true),
+  MoveForRed(
+      index1: 1,
+      index2: 5,
+      playerCode: PlayerCode.RED,
+      isSpecialPosition: true),
 ];

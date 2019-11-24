@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 enum PlayerCode {
   SPECIAL_AREA,
+  STAR,
   BLUESTAR,
   REDSTAR,
   GREENSTAR,

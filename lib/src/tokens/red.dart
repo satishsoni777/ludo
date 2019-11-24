@@ -1,15 +1,37 @@
 import 'package:flutter/material.dart';
+import 'package:ludo_game/src/state/state_model.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class RedToken extends StatelessWidget {
+  final double height;
+  final double width;
+  final int tokenId;
+
+  final CurrentRedTravelingPath redTravelingPath;
+  RedToken({this.height, this.tokenId, this.width, this.redTravelingPath});
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(2.0),
-      child: Container(
-        decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: Colors.redAccent,
-            border: Border.all(width: 2, color: Colors.pink)),
+    final model = ScopedModel.of<StateModel>(context);
+    return Container(
+      height: height,
+      width: width,
+      // decoration: BoxDecoration(
+      //   border: Border.all(
+      //     color: Colors.black
+      //   )
+      // ),
+      child: FlatButton(
+        child: Text(''),
+        color: Colors.redAccent,
+        shape: CircleBorder(
+          side: BorderSide(color: Colors.black)
+        ),
+        onPressed: () {
+          if (model.diceNumber != 0)
+            model.moveForRed(model.diceNumber,
+                tokenId: tokenId, currentLocation: redTravelingPath);
+        },
+        // borderRadius: BorderRadius.circular(height / 2),
       ),
     );
   }

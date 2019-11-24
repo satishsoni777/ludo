@@ -53,6 +53,27 @@ class GreenPlayer extends StatelessWidget {
                   border: Border.all(color: Colors.black45, width: 1),
                   color: boardColor),
             ),
+            Positioned(
+              bottom: 0,
+              child: Container(
+                child: Row(
+                    children: model.currentLocationGreenToken.values.map((s) {
+                  if (s.playerCode == PlayerCode.GREENHOME)
+                    return Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Container(
+                        height: 25,
+                        width: 25,
+                        decoration: BoxDecoration(
+                            color: Colors.greenAccent,
+                            borderRadius: BorderRadius.circular(12.5)),
+                      ),
+                    );
+                  else
+                    return Container();
+                }).toList(growable: false)),
+              ),
+            ),
             LayoutBuilder(
               builder: (context, contr) {
                 print(contr);

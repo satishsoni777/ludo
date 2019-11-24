@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:ludo_game/src/playerBoard/player.green.dart';
 import 'package:ludo_game/src/playerBoard/player_blue.dart';
@@ -212,21 +214,21 @@ class _DiceAnimatonState extends State<DiceAnimaton>
   GifController gifController;
   Animation<double> _animation;
   AnimationController _animationController;
-  Map<double, int> _diceNumber = {
-    1.0: 1,
-    2: 2,
-    4.0: 4,
-    7.0: 6,
-    8.0: 8,
-    10.0: 10
+  Map<int, double> _diceNumber = {
+   
   };
   final testList = [1, 2, 3, 4, 5, 6];
+  int min = 1, max = 7;
+  Random rnd;
   @override
   void initState() {
+    
+    rnd = new Random();
     gifController = widget.animation;
     _animationController =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
-    _animation = Tween<double>(begin: 1, end: 2).animate(_animationController);
+        AnimationController(vsync: this, duration: Duration(milliseconds: 200));
+    _animation =
+        Tween<double>(begin: 1, end: 1.5).animate(_animationController);
     _animationController.addStatusListener((s) {
       if (s == AnimationStatus.completed) {
         _animationController.reverse();
@@ -244,29 +246,34 @@ class _DiceAnimatonState extends State<DiceAnimaton>
   @override
   Widget build(BuildContext context) {
     final model = ScopedModel.of<StateModel>(context);
+    gifController.animateTo(10,
+                  curve: Curves.ease, duration: Duration(milliseconds: 0));
     // print(model.currentLocationBlueToken[0].index1);
     return ScaleTransition(
       scale: _animation,
       child: Padding(
-        padding: const EdgeInsets.only(left: 8,right: 8),
+        padding: const EdgeInsets.only(left: 8, right: 8),
         child: InkWell(
           // splashColor: Colors.transparent,
           borderRadius: BorderRadius.circular(20),
           onTap: () async {
+            int diceNum = min + rnd.nextInt(max - min);
+            print('diceNum $diceNum');
             _animationController.forward();
-            testList.shuffle();
-            print(testList[0]);
             gifController.repeat(
-                min: 1, max: 6, period: Duration(milliseconds: 250));
-            await Future.delayed(Duration(seconds: 1), () {
-              model.diceNumber = testList[0];
-              gifController.animateTo(testList[0].toDouble(),
-                  curve: Curves.ease, duration: Duration(seconds: 0));
+                min: 2, max: 12, period: Duration(milliseconds: 250));
+            await Future.delayed(Duration(milliseconds: 600), () {
+              model.diceNumber = diceNum;
+              gifController.animateTo(2.9,
+                  curve: Curves.ease, duration: Duration(milliseconds: 0));
             });
           },
-          child: GifImage(
-            image: AssetImage('assets/dice_play.gif'),
-            controller: gifController,
+          child: Transform.rotate(
+            angle: -145,
+            child: GifImage(
+              image: AssetImage('assets/dice_play.gif'),
+              controller: gifController,
+            ),
           ),
         ),
       ),

@@ -47,10 +47,10 @@ class _BlueTravelingState extends State<BlueTraveling> {
       for (int index2 = 0; index2 < 3; index2++) {
         if (index1 == 1 && index2 == 2)
           blueTravelingPath.add(BlueTravelingPath(
-              index1: index1, index2: index2, playerCode: PlayerCode.BLUESTAR));
+              index1: index1, index2: index2, playerCode: PlayerCode.STAR));
         else if (index1 == 2 && index2 == 0) {
           blueTravelingPath.add(BlueTravelingPath(
-              index1: index1, index2: index2, playerCode: PlayerCode.BLUESTAR));
+              index1: index1, index2: index2, playerCode: PlayerCode.STAR));
         } else {
           blueTravelingPath.add(BlueTravelingPath(
             index1: index1,

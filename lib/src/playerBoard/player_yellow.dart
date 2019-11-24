@@ -55,6 +55,27 @@ class YellowPlayer extends StatelessWidget {
                   border: Border.all(color: Colors.black45, width: 1),
                   color: Color(0xffffff50)),
             ),
+               Positioned(
+                bottom: 0,
+                child: Container(
+                  child: Row(
+                      children: model.currentLocationYellowToken.values.map((s) {
+                    if (s.playerCode == PlayerCode.YELLOWHOME)
+                      return Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Container(
+                          height: 25,
+                          width: 25,
+                          decoration: BoxDecoration(
+                              color: Colors.yellow,
+                              borderRadius: BorderRadius.circular(12.5)),
+                        ),
+                      );
+                    else
+                      return Container();
+                  }).toList(growable: false)),
+                ),
+              ),
             LayoutBuilder(
               builder: (context, contr) {
                 print(contr);

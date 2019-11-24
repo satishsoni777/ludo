@@ -23,6 +23,8 @@ Widget moveToken(BuildContext context,
   CurrentBlueTravelingPath currentBlueTravelingPath;
   CurrentYellowTravelingPath currentYellowTravleingPath;
   CurrentGreenTravelingPath currentGreenTravelingPath;
+  CurrentRedTravelingPath currentRedTravelingPath;
+  
   // logic for blue
   for (CurrentBlueTravelingPath b
       in commonModel.currentLocationBlueToken.values) {
@@ -31,14 +33,14 @@ Widget moveToken(BuildContext context,
         (b.index2 == index2)) {
       token = b.tokenId;
       currentBlueTravelingPath = b;
-      
+
       blueTokenChildren.add(BlueToken(
         tokenId: b.tokenId,
         blueTravelingPath: b,
       ));
     }
   }
-  // print('blue widget count ${blueTokenChildren.length}');
+
   // logic for yellow
   for (CurrentYellowTravelingPath y
       in commonModel.currentLocationYellowToken.values) {
@@ -60,7 +62,7 @@ Widget moveToken(BuildContext context,
     if ((g.playerCode == playerCode) &&
         (g.index1 == index1) &&
         (g.index2 == index2)) {
-          print('gren token painted');
+      print('gren token painted');
       token = g.tokenId;
       currentGreenTravelingPath = g;
       greenTokenChildren.add(GreenToken(
@@ -69,18 +71,23 @@ Widget moveToken(BuildContext context,
       ));
     }
   }
+
+// logic red
   for (CurrentRedTravelingPath r
       in commonModel.currentLocationRedToken.values) {
     if ((r.playerCode == playerCode) &&
         (r.index1 == index1) &&
         (r.index2 == index2)) {
-      blueTokenChildren.add(RedToken());
+      token = r.tokenId;
+      currentRedTravelingPath = r;
+      redTokenChildren.add(RedToken(
+        tokenId: r.tokenId,
+        redTravelingPath: r,
+      ));
     }
   }
 
-
-  // widget
-
+  // blue tokens widget
   if (blueTokenChildren.isNotEmpty) {
     if (blueTokenChildren.length == 1)
       return BlueToken(
@@ -99,9 +106,9 @@ Widget moveToken(BuildContext context,
         blueTravelingPath: currentBlueTravelingPath,
       );
   }
-  
+
   // yellow token
-   else if (yellowTokenChildren.isNotEmpty) {
+  else if (yellowTokenChildren.isNotEmpty) {
     if (yellowTokenChildren.length == 1)
       return YellowToken(
         height: 50,
@@ -110,7 +117,7 @@ Widget moveToken(BuildContext context,
         yellowTravelingPath: currentYellowTravleingPath,
       );
     else if (yellowTokenChildren.length >= 2)
-      return Wrap(alignment: WrapAlignment.center, children: blueTokenChildren);
+      return Wrap(alignment: WrapAlignment.center, children: yellowTokenChildren);
     else
       return YellowToken(
         height: 50,
@@ -118,7 +125,10 @@ Widget moveToken(BuildContext context,
         tokenId: token,
         yellowTravelingPath: currentYellowTravleingPath,
       );
-  } else if (greenTokenChildren.isNotEmpty) {
+  }
+  
+  // green tokens
+   else if (greenTokenChildren.isNotEmpty) {
     if (greenTokenChildren.length == 1)
       return GreenToken(
         height: 50,
@@ -127,7 +137,8 @@ Widget moveToken(BuildContext context,
         greenTravelingPath: currentGreenTravelingPath,
       );
     else if (greenTokenChildren.length >= 2)
-      return Wrap(alignment: WrapAlignment.center, children: greenTokenChildren);
+      return Wrap(
+          alignment: WrapAlignment.center, children: greenTokenChildren);
     else
       return GreenToken(
         height: 50,
@@ -135,10 +146,26 @@ Widget moveToken(BuildContext context,
         tokenId: token,
         greenTravelingPath: currentGreenTravelingPath,
       );
-  } else if (redTokenChildren.isNotEmpty) {
-    return Wrap(
-      children: redTokenChildren,
-    );
+  } 
+
+  // red widget token
+  else if (redTokenChildren.isNotEmpty) {
+    if (redTokenChildren.length == 1)
+      return RedToken(
+        height: 50,
+        width: 50,
+        tokenId: token,
+        redTravelingPath: currentRedTravelingPath,
+      );
+    else if (greenTokenChildren.length >= 2)
+      return Wrap(alignment: WrapAlignment.center, children: redTokenChildren);
+    else
+      return RedToken(
+        height: 50,
+        width: 50,
+        tokenId: token,
+        redTravelingPath: currentRedTravelingPath,
+      );
   } else
     return Container();
 }
