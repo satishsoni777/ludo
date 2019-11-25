@@ -70,7 +70,7 @@ class _YellowTravelingState extends State<YellowTraveling> {
     Widget _build(int index1, int index2, c, PlayerCode playerCode) {
       // print('yellow $playerCode');
       bool paintIt = false;
-      print('yellowe $index1, $index2 $playerCode');
+      // print('yellowe $index1, $index2 $playerCode');
       for (YellowPath b in yellowPath) {
         if (b.index1 == index1 && b.index2 == index2) {
           paintIt = true;

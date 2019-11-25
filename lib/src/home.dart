@@ -38,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
       count++;
     });
     count = 0;
-    
+
     super.initState();
   }
 
@@ -54,13 +54,13 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               InkWell(
                 onTap: () {
-                  _player = Player.DOUBLE;
+                  _player = Player.TWO_PLAYER;
                   setState(() {});
                 },
                 child: Container(
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      color: _player == Player.DOUBLE
+                      color: _player == Player.TWO_PLAYER
                           ? Colors.grey
                           : Colors.transparent,
                       border: Border.all(
@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               InkWell(
                 onTap: () {
-                  _player = Player.FOURTH;
+                  _player = Player.FOUR_PLAYER;
                   setState(() {});
                 },
                 child: Container(
@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   width: 100,
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      color: _player == Player.FOURTH
+                      color: _player == Player.FOUR_PLAYER
                           ? Colors.grey
                           : Colors.transparent,
                       border: Border.all(
@@ -122,8 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 path: "assets/dice.obj",
                 asset: true,
                 color: Colors.green,
-                onTap: () {
-                },
+                onTap: () {},
               ),
             ],
           ),
@@ -131,4 +130,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-enum Player { DOUBLE, FOURTH }
+enum Player {
+  TWO_PLAYER,
+  FOUR_PLAYER,
+  RED_GREEN,
+  YELLOW_RED,
+  ALL,
+  COMPUTER_TWO_PLAYER,
+  COMPUTER_FOUR_PLAYER
+}

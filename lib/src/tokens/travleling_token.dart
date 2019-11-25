@@ -14,7 +14,8 @@ Widget moveToken(BuildContext context,
     double height,
     double width}) {
   final commonModel = ScopedModel.of<StateModel>(context);
-  // print(playerCode);
+  double height = 8;
+  double width = 8;
   int token;
   final blueTokenChildren = <Widget>[];
   final yellowTokenChildren = <Widget>[];
@@ -24,19 +25,21 @@ Widget moveToken(BuildContext context,
   CurrentYellowTravelingPath currentYellowTravleingPath;
   CurrentGreenTravelingPath currentGreenTravelingPath;
   CurrentRedTravelingPath currentRedTravelingPath;
-  
+  int count = 0;
   // logic for blue
   for (CurrentBlueTravelingPath b
       in commonModel.currentLocationBlueToken.values) {
     if ((b.playerCode == playerCode) &&
         (b.index1 == index1) &&
         (b.index2 == index2)) {
+      count++;
+      print('count $count');
       token = b.tokenId;
       currentBlueTravelingPath = b;
-
       blueTokenChildren.add(BlueToken(
         tokenId: b.tokenId,
         blueTravelingPath: b,
+      
       ));
     }
   }
@@ -62,7 +65,6 @@ Widget moveToken(BuildContext context,
     if ((g.playerCode == playerCode) &&
         (g.index1 == index1) &&
         (g.index2 == index2)) {
-      print('gren token painted');
       token = g.tokenId;
       currentGreenTravelingPath = g;
       greenTokenChildren.add(GreenToken(
@@ -97,7 +99,7 @@ Widget moveToken(BuildContext context,
         blueTravelingPath: currentBlueTravelingPath,
       );
     else if (blueTokenChildren.length >= 2)
-      return Wrap(alignment: WrapAlignment.center, children: blueTokenChildren);
+      return Wrap(alignment: WrapAlignment.start, children: blueTokenChildren);
     else
       return BlueToken(
         height: 50,
@@ -117,7 +119,8 @@ Widget moveToken(BuildContext context,
         yellowTravelingPath: currentYellowTravleingPath,
       );
     else if (yellowTokenChildren.length >= 2)
-      return Wrap(alignment: WrapAlignment.center, children: yellowTokenChildren);
+      return Wrap(
+          alignment: WrapAlignment.center, children: yellowTokenChildren);
     else
       return YellowToken(
         height: 50,
@@ -126,9 +129,9 @@ Widget moveToken(BuildContext context,
         yellowTravelingPath: currentYellowTravleingPath,
       );
   }
-  
+
   // green tokens
-   else if (greenTokenChildren.isNotEmpty) {
+  else if (greenTokenChildren.isNotEmpty) {
     if (greenTokenChildren.length == 1)
       return GreenToken(
         height: 50,
@@ -146,7 +149,7 @@ Widget moveToken(BuildContext context,
         tokenId: token,
         greenTravelingPath: currentGreenTravelingPath,
       );
-  } 
+  }
 
   // red widget token
   else if (redTokenChildren.isNotEmpty) {

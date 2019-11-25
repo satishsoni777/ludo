@@ -19,7 +19,7 @@ class BlueToken extends StatelessWidget {
   Widget build(BuildContext context) {
     print(tokenId);
     final model = ScopedModel.of<StateModel>(context);
-    return Container(
+  return  Container(
       height: height,
       width: width,
       child: FlatButton(

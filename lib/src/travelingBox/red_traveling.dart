@@ -60,7 +60,7 @@ class _RedTravelingState extends State<RedTraveling> {
     Widget _build(int index1, int index2, c, PlayerCode playerCode) {
       bool paintIt = false;
       // print('red toke $playerCode');
-      print('red $index1, $index2 $playerCode');
+      // print('red $index1, $index2 $playerCode');
       for (RedPath b in redPath) {
         if (b.index1 == index1 && b.index2 == index2) {
           paintIt = true;

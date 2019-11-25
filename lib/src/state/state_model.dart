@@ -10,9 +10,9 @@ import 'package:ludo_game/src/token_paths/blue_traveling_path.dart';
 import 'package:ludo_game/utils/util.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-abstract class TokensCurrentLocation {}
+// abstract class TokensCurrentLocation {}
 
-class CurrentBlueTravelingPath extends TokensCurrentLocation {
+class CurrentBlueTravelingPath {
   int index1;
   int index2;
   PlayerCode playerCode;
@@ -30,7 +30,7 @@ class CurrentBlueTravelingPath extends TokensCurrentLocation {
       this.playerCode = PlayerCode.HOME});
 }
 
-class CurrentYellowTravelingPath extends TokensCurrentLocation {
+class CurrentYellowTravelingPath {
   int index1;
   int index2;
   PlayerCode playerCode;
@@ -46,7 +46,7 @@ class CurrentYellowTravelingPath extends TokensCurrentLocation {
       this.playerCode = PlayerCode.HOME});
 }
 
-class CurrentGreenTravelingPath extends TokensCurrentLocation {
+class CurrentGreenTravelingPath {
   int index1;
   int index2;
   PlayerCode playerCode;
@@ -62,7 +62,7 @@ class CurrentGreenTravelingPath extends TokensCurrentLocation {
       this.playerCode = PlayerCode.HOME});
 }
 
-class CurrentRedTravelingPath extends TokensCurrentLocation {
+class CurrentRedTravelingPath {
   int index1;
   int index2;
   PlayerCode playerCode;
@@ -79,18 +79,8 @@ class CurrentRedTravelingPath extends TokensCurrentLocation {
 }
 
 class StateModel extends Model {
-  StateModel() {
-    // tokensCurrentLocation.add(currentLocationBlueToken);
-
-    // tokensCurrentLocation.add(currentLocationYellowToken);
-
-    // tokensCurrentLocation.add(currentLocationGreenToken);
-
-    // tokensCurrentLocation.add(currentLocationRedToken);
-    // print('testin ${tokensCurrentLocation.length}');
-  }
-  int index;
-  int index1;
+  StateModel() {}
+  int countSixForTokens = 0;
   int diceNumber = 0;
   PlayerCode playerTurn = PlayerCode.BLUE;
   List<BluePath> bluePath = [];
@@ -127,7 +117,7 @@ class StateModel extends Model {
     4: CurrentRedTravelingPath(tokenId: 4),
   };
 
-  List<Map<int, TokensCurrentLocation>> tokensCurrentLocation = [];
+  // List<Map<int, TokensCurrentLocation>> tokensCurrentLocation = [];
 
   /// moves for blue token
   void moveForBlue(int number,
@@ -172,8 +162,6 @@ class StateModel extends Model {
         playerCode: playerCode ?? moveForBlue.playerCode,
         tokenId: tokenId);
     currentLocationBlueToken[tokenId] = blue;
-    print(
-        'adasdsad ${moveForBlue.isSpecialPosition} ${moveForBlue.playerCode}');
     if (moveForBlue.isSpecialPosition == false)
       tokenKillingFromBlueToken(
           index1: moveForBlue.index1,
@@ -225,10 +213,10 @@ class StateModel extends Model {
         playerCode: playerCode ?? moveForYellow.playerCode,
         tokenId: tokenId,
         currentPosition: currentLocation);
-        tokenKillingFromYellowToken(
-          index1: moveForYellow.index1,
-          index2: moveForYellow.index2,
-          playerCode: moveForYellow.playerCode);
+    tokenKillingFromYellowToken(
+        index1: moveForYellow.index1,
+        index2: moveForYellow.index2,
+        playerCode: moveForYellow.playerCode);
   }
 
   /// traveling logic for green
@@ -272,10 +260,10 @@ class StateModel extends Model {
         index2: moveForGreen.index2,
         playerCode: playerCode ?? moveForGreen.playerCode,
         tokenId: tokenId);
-        tokenKillingFromGreenToken(
-          index1: moveForGreen.index1,
-          index2: moveForGreen.index2,
-          playerCode: moveForGreen.playerCode);
+    tokenKillingFromGreenToken(
+        index1: moveForGreen.index1,
+        index2: moveForGreen.index2,
+        playerCode: moveForGreen.playerCode);
     diceNumber = 0;
   }
 
@@ -322,10 +310,8 @@ class StateModel extends Model {
         playerCode: playerCode ?? move.playerCode,
         tokenId: tokenId,
         currentPosition: currentLocation);
-         tokenKillingFromRedToken(
-          index1: move.index1,
-          index2: move.index2,
-          playerCode: move.playerCode);
+    tokenKillingFromRedToken(
+        index1: move.index1, index2: move.index2, playerCode: move.playerCode);
   }
 
   /// blue token killing logic
