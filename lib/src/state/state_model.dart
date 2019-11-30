@@ -80,8 +80,10 @@ class CurrentRedTravelingPath {
 
 class StateModel extends Model {
   StateModel() {}
+
+  TokenAction tokenAction;
   int countSixForTokens = 0;
-  int diceNumber = 0;
+  int diceNumber=0;
   PlayerCode playerTurn = PlayerCode.BLUE;
   List<BluePath> bluePath = [];
   List<YellowPath> yellowPath = [];
@@ -120,6 +122,25 @@ class StateModel extends Model {
   // List<Map<int, TokensCurrentLocation>> tokensCurrentLocation = [];
 
   /// moves for blue token
+  switchUserTurn(int dice, {PlayerCode playerCode}) {
+    if (dice == 6) countSixForTokens++;
+    if (countSixForTokens == 3) {
+      // switch user
+      dice = 0;
+      playerTurn = playerCode;
+      countSixForTokens = 0;
+    } else if (diceNumber < 6 && countSixForTokens == 1) {
+      // switch user
+      countSixForTokens = 0;
+
+      playerTurn = playerCode;
+    } else if (dice < 6) {
+      // switch user
+      countSixForTokens = 0;
+      playerTurn = playerCode;
+    }
+  }
+
   void moveForBlue(int number,
       {CurrentBlueTravelingPath currentLocation, int blueTokenId}) {
     if (number == 6 && currentLocation.playerCode == PlayerCode.HOME) {
@@ -140,6 +161,7 @@ class StateModel extends Model {
             currentLocation: currentLocation.currentPosition + number,
             tokenId: blueTokenId);
       } else if (number + currentLocation.currentPosition == 56) {
+        tokenAction = TokenAction.SpecialHome;
         print('home');
         updateCurrentLocationForBlue(
             movesForBluePath[currentLocation.currentPosition + number - 1],
@@ -148,7 +170,13 @@ class StateModel extends Model {
             playerCode: PlayerCode.BLUEHOME);
       }
     }
-    diceNumber = 0;
+
+    // if only token does not do this action than no need to call
+    print('token action ${tokenAction}');
+    if (tokenAction != TokenAction.Killed ||
+        tokenAction != TokenAction.SpecialHome)
+      switchUserTurn(number, playerCode: PlayerCode.YELLOW);
+
     notifyListeners();
   }
 
@@ -167,7 +195,6 @@ class StateModel extends Model {
           index1: moveForBlue.index1,
           index2: moveForBlue.index2,
           playerCode: moveForBlue.playerCode);
-    diceNumber = 0;
   }
 
   /// Move for yellow token
@@ -192,6 +219,8 @@ class StateModel extends Model {
           tokenId: yellowTokenId,
         );
       } else if (number + currentLocation.currentPosition == 56) {
+        print('home');
+        tokenAction = TokenAction.SpecialHome;
         updateCurrentLocationForYellow(
           movesForYellowPath[currentLocation.currentPosition + number - 1],
           currentLocation: currentLocation.currentPosition + number - 1,
@@ -200,8 +229,10 @@ class StateModel extends Model {
         );
       }
     }
+    if (tokenAction != TokenAction.Killed ||
+        tokenAction != TokenAction.SpecialHome)
+      switchUserTurn(number, playerCode: PlayerCode.GREEN);
 
-    diceNumber = 0;
     notifyListeners();
   }
 
@@ -241,14 +272,19 @@ class StateModel extends Model {
             tokenId: tokenId);
       } else if (number + currentLocation.currentPosition == 56) {
         print('home');
+        print('home');
+        tokenAction = TokenAction.SpecialHome;
         updateCurrentLocationForGreen(
             movesForGreenPath[currentLocation.currentPosition + number - 1],
             currentLocation: currentLocation.currentPosition + number - 1,
             tokenId: tokenId,
-            playerCode: PlayerCode.BLUEHOME);
+            playerCode: PlayerCode.GREENHOME);
       }
     }
-    diceNumber = 0;
+    if (tokenAction != TokenAction.Killed ||
+        tokenAction != TokenAction.SpecialHome)
+      switchUserTurn(number, playerCode: PlayerCode.RED);
+
     notifyListeners();
   }
 
@@ -264,7 +300,6 @@ class StateModel extends Model {
         index1: moveForGreen.index1,
         index2: moveForGreen.index2,
         playerCode: moveForGreen.playerCode);
-    diceNumber = 0;
   }
 
 // move for red logic
@@ -289,6 +324,8 @@ class StateModel extends Model {
           tokenId: tokenId,
         );
       } else if (number + currentLocation.currentPosition == 56) {
+        print('home');
+        tokenAction = TokenAction.SpecialHome;
         updateCurrentLocationForRed(
           movesForRedPath[currentLocation.currentPosition + number - 1],
           currentLocation: currentLocation.currentPosition + number - 1,
@@ -297,8 +334,10 @@ class StateModel extends Model {
         );
       }
     }
+    if (tokenAction != TokenAction.Killed ||
+        tokenAction != TokenAction.SpecialHome)
+      switchUserTurn(number, playerCode: PlayerCode.BLUE);
 
-    diceNumber = 0;
     notifyListeners();
   }
 
@@ -370,7 +409,8 @@ class StateModel extends Model {
           v.index2 == index2 &&
           v.playerCode == playerCode &&
           playerCode != PlayerCode.STAR) {
-        print('trur for yellow $k');
+        tokenAction = TokenAction.Killed;
+        print('true for blue $k');
         currentLocationBlueToken[k] = CurrentBlueTravelingPath(
           index1: -1,
           index2: -1,
@@ -387,6 +427,7 @@ class StateModel extends Model {
           v.playerCode == playerCode &&
           playerCode != PlayerCode.STAR) {
         print('trur for yellow $k');
+        tokenAction = TokenAction.Killed;
         currentLocationYellowToken[k] = CurrentYellowTravelingPath(
           index1: -1,
           index2: -1,
@@ -402,7 +443,8 @@ class StateModel extends Model {
           v.index2 == index2 &&
           v.playerCode == playerCode &&
           playerCode != PlayerCode.STAR) {
-        print('trur for yellow $k');
+        tokenAction = TokenAction.Killed;
+        print('trur for green $k');
         currentLocationGreenToken[k] = CurrentGreenTravelingPath(
           index1: -1,
           index2: -1,
@@ -419,6 +461,8 @@ class StateModel extends Model {
           v.playerCode == playerCode &&
           playerCode != PlayerCode.STAR) {
         print('trur for yellow $k');
+
+        tokenAction = TokenAction.Killed;
         currentLocationRedToken[k] = CurrentRedTravelingPath(
           index1: -1,
           index2: -1,
@@ -428,3 +472,5 @@ class StateModel extends Model {
     });
   }
 }
+
+enum TokenAction { Killed, SpecialHome, Pass }

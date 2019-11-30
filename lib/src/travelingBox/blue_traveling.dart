@@ -118,7 +118,6 @@ class _BlueTravelingState extends State<BlueTraveling> {
           height: c.maxHeight / 6,
           decoration: BoxDecoration(
               border: Border.all(color: Colors.black38, width: .5)),
-          // child: Text('$index1, $index2'),
           child: moveToken(context,
               index1: index1, index2: index2, playerCode: playerCode),
         );
@@ -134,7 +133,6 @@ class _BlueTravelingState extends State<BlueTraveling> {
                 return Row(
                   children: List<Widget>.generate(3, (index2) {
                     count++;
-                    // return Text('');
                     return _build(
                         index1, index2, c, blueTravelingPath[count].playerCode);
                   }, growable: false),

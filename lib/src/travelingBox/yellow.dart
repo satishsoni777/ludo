@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ludo_game/src/state/state_model.dart';
 import 'package:ludo_game/src/state/traveling_paths.dart';
-import 'package:ludo_game/src/tokens/blue.dart';
 import 'package:ludo_game/src/tokens/travleling_token.dart';
-import 'package:ludo_game/src/tokens/yellow.dart';
 import 'package:ludo_game/utils/util.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -146,7 +144,6 @@ class _YellowTravelingState extends State<YellowTraveling> {
                 children: List<Widget>.generate(3, (index1) {
               return Row(
                 children: List<Widget>.generate(6, (index2) {
-                
                   count++;
                   return _build(
                       index1, index2, c, yellowTravelingPath[count].playerCode);

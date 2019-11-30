@@ -17,9 +17,9 @@ class GreenPlayer extends StatelessWidget {
       if (currentGreenTravelingPath.playerCode == PlayerCode.HOME)
         return InkWell(
           onTap: () {
-            if (model.diceNumber == 6)
-              model.moveForGreen(6,
-                  tokenId: tokenId, currentLocation: currentGreenTravelingPath);
+               if(model.playerTurn==PlayerCode.GREEN && model.diceNumber==6)
+            model.moveForGreen(model.diceNumber,
+                tokenId: tokenId, currentLocation: currentGreenTravelingPath);
           },
           child: Container(
             margin: EdgeInsets.all(5),

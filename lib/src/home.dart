@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:ludo_game/src/components/3dRenderObject.dart';
 import 'package:ludo_game/src/token_paths/green_travleling_path.dart';
 import 'package:ludo_game/src/token_paths/yellow_travelling.path.dart';
@@ -18,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int count = 0;
   @override
   void initState() {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     movesForBluePath.forEach((s) {
       movesForBluePath[count].location = count;
       count++;

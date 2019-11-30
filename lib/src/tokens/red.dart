@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ludo_game/src/state/state_model.dart';
+import 'package:ludo_game/utils/util.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class RedToken extends StatelessWidget {
@@ -27,7 +28,7 @@ class RedToken extends StatelessWidget {
           side: BorderSide(color: Colors.black)
         ),
         onPressed: () {
-          if (model.diceNumber != 0)
+          if (model.playerTurn == PlayerCode.RED)
             model.moveForRed(model.diceNumber,
                 tokenId: tokenId, currentLocation: redTravelingPath);
         },

@@ -25,7 +25,7 @@ class YellowToken extends StatelessWidget {
         color: yellowDarkColor,
         shape: CircleBorder(side: BorderSide(color: Colors.black)),
         onPressed: () {
-          if (model.diceNumber != 0)
+          if (model.playerTurn == PlayerCode.GREEN)
             model.moveForYellow(model.diceNumber,
                 yellowTokenId: tokenId, currentLocation: yellowTravelingPath);
         },

@@ -27,7 +27,7 @@ class BlueToken extends StatelessWidget {
         color: blueColorCode,
         shape: CircleBorder(),
         onPressed: () {
-          if (model.playerTurn == PlayerCode.BLUE && model.diceNumber != 0)
+          if (model.playerTurn == PlayerCode.BLUE)
             model.moveForBlue(model.diceNumber,
                 blueTokenId: tokenId, currentLocation: blueTravelingPath);
         },

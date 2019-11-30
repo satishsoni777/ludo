@@ -16,8 +16,8 @@ class RedPlayer extends StatelessWidget {
       if (currentRedTravelingPath.playerCode == PlayerCode.HOME)
         return InkWell(
           onTap: () {
-            if (model.diceNumber == 6)
-            model.moveForRed(6,
+             if(model.playerTurn==PlayerCode.RED && model.diceNumber==6)
+            model.moveForRed(model.diceNumber,
                 tokenId: tokenId,
                 currentLocation: currentRedTravelingPath);
           },

@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:ludo_game/src/state/state_model.dart';
 import 'package:ludo_game/src/tokens/blue.dart';
@@ -17,6 +19,7 @@ Widget moveToken(BuildContext context,
   double height = 8;
   double width = 8;
   int token;
+  final tokensChildren = <Widget>[];
   final blueTokenChildren = <Widget>[];
   final yellowTokenChildren = <Widget>[];
   final greenTokenChildren = <Widget>[];
@@ -26,6 +29,7 @@ Widget moveToken(BuildContext context,
   CurrentGreenTravelingPath currentGreenTravelingPath;
   CurrentRedTravelingPath currentRedTravelingPath;
   int count = 0;
+  // print('token turns ${commonModel.playerTurn}');
   // logic for blue
   for (CurrentBlueTravelingPath b
       in commonModel.currentLocationBlueToken.values) {
@@ -39,11 +43,12 @@ Widget moveToken(BuildContext context,
       blueTokenChildren.add(BlueToken(
         tokenId: b.tokenId,
         blueTravelingPath: b,
-      
+        height: 50,
+        width: 50,
       ));
     }
   }
-
+  count = 0;
   // logic for yellow
   for (CurrentYellowTravelingPath y
       in commonModel.currentLocationYellowToken.values) {
@@ -52,13 +57,16 @@ Widget moveToken(BuildContext context,
         (y.index2 == index2)) {
       token = y.tokenId;
       currentYellowTravleingPath = y;
+      count++;
       yellowTokenChildren.add(YellowToken(
         tokenId: y.tokenId,
         yellowTravelingPath: y,
+        height: 50,
+        width: 50,
       ));
     }
   }
-
+  count = 0;
   // logic for green
   for (CurrentGreenTravelingPath g
       in commonModel.currentLocationGreenToken.values) {
@@ -70,6 +78,8 @@ Widget moveToken(BuildContext context,
       greenTokenChildren.add(GreenToken(
         tokenId: g.tokenId,
         greenTravelingPath: g,
+        height: 50,
+        width: 50,
       ));
     }
   }
@@ -82,93 +92,97 @@ Widget moveToken(BuildContext context,
         (r.index2 == index2)) {
       token = r.tokenId;
       currentRedTravelingPath = r;
+      count++;
       redTokenChildren.add(RedToken(
         tokenId: r.tokenId,
         redTravelingPath: r,
+        height: 50,
+        width: 50,
       ));
     }
   }
+  tokensChildren.addAll(blueTokenChildren);
 
-  // blue tokens widget
-  if (blueTokenChildren.isNotEmpty) {
-    if (blueTokenChildren.length == 1)
-      return BlueToken(
-        height: 50,
-        width: 50,
-        tokenId: token,
-        blueTravelingPath: currentBlueTravelingPath,
-      );
-    else if (blueTokenChildren.length >= 2)
-      return Wrap(alignment: WrapAlignment.start, children: blueTokenChildren);
-    else
-      return BlueToken(
-        height: 50,
-        width: 50,
-        tokenId: token,
-        blueTravelingPath: currentBlueTravelingPath,
-      );
+  tokensChildren.addAll(greenTokenChildren);
+
+  tokensChildren.addAll(yellowTokenChildren);
+
+  tokensChildren.addAll(redTokenChildren);
+  Queue<Widget> children = Queue();
+  if (commonModel.playerTurn == PlayerCode.BLUE) {
+    print('player code');
+    tokensChildren.forEach((s) {
+      if (s is BlueToken) {
+        children.addLast(s);
+      } else {
+        children.addFirst(s);
+      }
+    });
+  } else if (commonModel.playerTurn == PlayerCode.YELLOW) {
+    tokensChildren.forEach((s) {
+      if (s is YellowToken) {
+        children.addLast(s);
+      } else {
+        children.addFirst(s);
+      }
+    });
+  } else if (commonModel.playerTurn == PlayerCode.GREEN) {
+    tokensChildren.forEach((s) {
+      if (s is GreenToken) {
+        children.addLast(s);
+      } else {
+        children.addFirst(s);
+      }
+    });
+  } else if (commonModel.playerTurn == PlayerCode.RED) {
+    tokensChildren.forEach((s) {
+      if (s is RedToken) {
+        children.addLast(s);
+      } else {
+        children.addFirst(s);
+      }
+    });
   }
+  final tokens = children.toList();
+  return Stack(children: tokens);
+  // }
+  // blue tokens widget
+  // else if (blueTokenChildren.length == 1)
+  //   return BlueToken(
+  //     height: 50,
+  //     width: 50,
+  //     tokenId: token,
+  //     blueTravelingPath: currentBlueTravelingPath,
+  //   );
 
   // yellow token
-  else if (yellowTokenChildren.isNotEmpty) {
-    if (yellowTokenChildren.length == 1)
-      return YellowToken(
-        height: 50,
-        width: 50,
-        tokenId: token,
-        yellowTravelingPath: currentYellowTravleingPath,
-      );
-    else if (yellowTokenChildren.length >= 2)
-      return Wrap(
-          alignment: WrapAlignment.center, children: yellowTokenChildren);
-    else
-      return YellowToken(
-        height: 50,
-        width: 50,
-        tokenId: token,
-        yellowTravelingPath: currentYellowTravleingPath,
-      );
-  }
+
+  // else if (yellowTokenChildren.length == 1)
+  //   return YellowToken(
+  //     height: 50,
+  //     width: 50,
+  //     tokenId: token,
+  //     yellowTravelingPath: currentYellowTravleingPath,
+  //   );
 
   // green tokens
-  else if (greenTokenChildren.isNotEmpty) {
-    if (greenTokenChildren.length == 1)
-      return GreenToken(
-        height: 50,
-        width: 50,
-        tokenId: token,
-        greenTravelingPath: currentGreenTravelingPath,
-      );
-    else if (greenTokenChildren.length >= 2)
-      return Wrap(
-          alignment: WrapAlignment.center, children: greenTokenChildren);
-    else
-      return GreenToken(
-        height: 50,
-        width: 50,
-        tokenId: token,
-        greenTravelingPath: currentGreenTravelingPath,
-      );
-  }
+  // else if (greenTokenChildren.length == 1)
+  //   return GreenToken(
+  //     height: 50,
+  //     width: 50,
+  //     tokenId: token,
+  //     greenTravelingPath: currentGreenTravelingPath,
+  //   );
 
   // red widget token
-  else if (redTokenChildren.isNotEmpty) {
-    if (redTokenChildren.length == 1)
-      return RedToken(
-        height: 50,
-        width: 50,
-        tokenId: token,
-        redTravelingPath: currentRedTravelingPath,
-      );
-    else if (greenTokenChildren.length >= 2)
-      return Wrap(alignment: WrapAlignment.center, children: redTokenChildren);
-    else
-      return RedToken(
-        height: 50,
-        width: 50,
-        tokenId: token,
-        redTravelingPath: currentRedTravelingPath,
-      );
-  } else
-    return Container();
+  // else if (redTokenChildren.length == 1) {
+  //   return RedToken(
+  //     height: 50,
+  //     width: 50,
+  //     tokenId: token,
+  //     redTravelingPath: currentRedTravelingPath,
+  //   );
+  // }
+  // else
+  // return Container();
 }

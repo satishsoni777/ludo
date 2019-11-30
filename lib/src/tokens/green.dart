@@ -25,7 +25,7 @@ class GreenToken extends StatelessWidget {
         color: Colors.greenAccent,
         shape: CircleBorder(side: BorderSide(color: Colors.black)),
         onPressed: () {
-          if (model.playerTurn == PlayerCode.BLUE && model.diceNumber != 0)
+          if (model.playerTurn == PlayerCode.GREEN)
             model.moveForGreen(model.diceNumber,
                 tokenId: tokenId, currentLocation: greenTravelingPath);
         },
