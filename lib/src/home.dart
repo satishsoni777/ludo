@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:ludo_game/src/components/3dRenderObject.dart';
+import 'package:ludo_game/src/state/state_model.dart';
 import 'package:ludo_game/src/token_paths/green_travleling_path.dart';
 import 'package:ludo_game/src/token_paths/yellow_travelling.path.dart';
+import 'package:ludo_game/utils/util.dart';
+import 'package:scoped_model/scoped_model.dart';
 import 'game_playscreen.dart';
 import 'token_paths/blue_traveling_path.dart';
 import 'token_paths/red_travleling_path.dart';
@@ -46,6 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final model = ScopedModel.of<StateModel>(context);
     return Scaffold(
         backgroundColor: Color(0xff17105D),
         body: Center(
@@ -56,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: <Widget>[
               InkWell(
                 onTap: () {
+                  model.playingBoard = PlayingBoard.GREEN_BLUE;
                   _player = Player.TWO_PLAYER;
                   setState(() {});
                 },
@@ -81,6 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               InkWell(
                 onTap: () {
+                  model.playingBoard = PlayingBoard.RED_YELLOW;
+                  model.playerTurn=PlayerCode.RED;
                   _player = Player.FOUR_PLAYER;
                   setState(() {});
                 },

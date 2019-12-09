@@ -19,7 +19,7 @@ class BlueToken extends StatelessWidget {
   Widget build(BuildContext context) {
     print(tokenId);
     final model = ScopedModel.of<StateModel>(context);
-  return  Container(
+    return Container(
       height: height,
       width: width,
       child: FlatButton(
@@ -27,7 +27,7 @@ class BlueToken extends StatelessWidget {
         color: blueColorCode,
         shape: CircleBorder(),
         onPressed: () {
-          if (model.playerTurn == PlayerCode.BLUE)
+          if (model.playerTurn == PlayerCode.BLUE && model.diceNumber != 0)
             model.moveForBlue(model.diceNumber,
                 blueTokenId: tokenId, currentLocation: blueTravelingPath);
         },

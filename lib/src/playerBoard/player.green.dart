@@ -17,9 +17,37 @@ class GreenPlayer extends StatelessWidget {
       if (currentGreenTravelingPath.playerCode == PlayerCode.HOME)
         return InkWell(
           onTap: () {
-               if(model.playerTurn==PlayerCode.GREEN && model.diceNumber==6)
-            model.moveForGreen(model.diceNumber,
-                tokenId: tokenId, currentLocation: currentGreenTravelingPath);
+            int insideHome = 0, outFromGame = 0;
+            model.currentLocationGreenToken.forEach((k, v) {
+              if (v.playerCode == PlayerCode.HOME) {
+                insideHome++;
+              } else if (v.playerCode == PlayerCode.BLUEHOME) {
+                outFromGame++;
+              }
+            });
+            if (insideHome + outFromGame == 4) {
+              for (int i = 1;
+                  i <= model.currentLocationGreenToken.length;
+                  i++) {
+                if (model.currentLocationGreenToken[i].playerCode !=
+                    PlayerCode.BLUEHOME) {
+                  tokenId = i;
+                  break;
+                }
+              }
+            } else {
+              if (model.playerTurn == PlayerCode.GREEN &&
+                  model.diceNumber == 6 &&
+                  model.countNumberOfSix != 3) {
+                model.moveForGreen(model.diceNumber,
+                    tokenId: tokenId,
+                    currentLocation: currentGreenTravelingPath);
+                       model.diceNumber=0;
+              }
+            }
+            //    if(model.playerTurn==PlayerCode.GREEN && model.diceNumber==6)
+            // model.moveForGreen(model.diceNumber,
+            //     tokenId: tokenId, currentLocation: currentGreenTravelingPath);
           },
           child: Container(
             margin: EdgeInsets.all(5),
@@ -88,42 +116,45 @@ class GreenPlayer extends StatelessWidget {
                 );
               },
             ),
-            Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      _circle(
-                          currentGreenTravelingPath:
-                              model.currentLocationGreenToken[1],
-                          tokenId: 1),
-                      _circle(
-                          currentGreenTravelingPath:
-                              model.currentLocationGreenToken[2],
-                          tokenId: 2),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      _circle(
-                          currentGreenTravelingPath:
-                              model.currentLocationGreenToken[3],
-                          tokenId: 3),
-                      _circle(
-                          currentGreenTravelingPath:
-                              model.currentLocationGreenToken[4],
-                          tokenId: 4),
-                    ],
-                  ),
-                ],
-              ),
-            ),
+            model.playingBoard == PlayingBoard.All ||
+                    model.playingBoard == PlayingBoard.GREEN_BLUE
+                ? Container(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            _circle(
+                                currentGreenTravelingPath:
+                                    model.currentLocationGreenToken[1],
+                                tokenId: 1),
+                            _circle(
+                                currentGreenTravelingPath:
+                                    model.currentLocationGreenToken[2],
+                                tokenId: 2),
+                          ],
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            _circle(
+                                currentGreenTravelingPath:
+                                    model.currentLocationGreenToken[3],
+                                tokenId: 3),
+                            _circle(
+                                currentGreenTravelingPath:
+                                    model.currentLocationGreenToken[4],
+                                tokenId: 4),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(),
           ],
         );
       },

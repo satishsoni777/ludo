@@ -15,6 +15,7 @@ import 'package:scoped_model/scoped_model.dart';
 class CurrentBlueTravelingPath {
   int index1;
   int index2;
+  final bool isTwice;
   PlayerCode playerCode;
   int currentPosition;
   int tokenId;
@@ -22,6 +23,7 @@ class CurrentBlueTravelingPath {
   PlayerCode tokenStatus;
   CurrentBlueTravelingPath(
       {this.index1 = -1,
+      this.isTwice = false,
       this.index2 = -1,
       this.tokenName = PlayerCode.BLUE,
       this.currentPosition = -1,
@@ -79,12 +81,17 @@ class CurrentRedTravelingPath {
 }
 
 class StateModel extends Model {
-  StateModel() {}
+  StateModel() {
+    playerTurn = PlayerCode.BLUE;
+    playingBoard = PlayingBoard.All;
+  }
 
-  TokenAction tokenAction;
-  int countSixForTokens = 0;
-  int diceNumber=0;
-  PlayerCode playerTurn = PlayerCode.BLUE;
+  TokenAction tokenAction = TokenAction.Pass;
+  bool isRollAgain = false;
+  PlayingBoard playingBoard;
+  int countNumberOfSix = 0;
+  int diceNumber = 0;
+  PlayerCode playerTurn = PlayerCode.EMPTY;
   List<BluePath> bluePath = [];
   List<YellowPath> yellowPath = [];
   List<RedPath> redPath = [];
@@ -123,21 +130,47 @@ class StateModel extends Model {
 
   /// moves for blue token
   switchUserTurn(int dice, {PlayerCode playerCode}) {
-    if (dice == 6) countSixForTokens++;
-    if (countSixForTokens == 3) {
+    print('player switchUserTurn $playerCode');
+    // if (diceNumber == 6) countNumberOfSix++;
+    print('total six 6 $countNumberOfSix ');
+    if (countNumberOfSix == 3 && tokenAction != TokenAction.BonusPoint) {
+      print('1....');
       // switch user
-      dice = 0;
       playerTurn = playerCode;
-      countSixForTokens = 0;
-    } else if (diceNumber < 6 && countSixForTokens == 1) {
+      countNumberOfSix = 0;
+      tokenAction = TokenAction.Pass;
+      isRollAgain = false;
+      notifyListeners();
+    } else if (diceNumber < 6 &&
+        countNumberOfSix == 1 &&
+        tokenAction != TokenAction.BonusPoint) {
+      print('2....');
       // switch user
-      countSixForTokens = 0;
-
+      countNumberOfSix = 0;
       playerTurn = playerCode;
-    } else if (dice < 6) {
+      tokenAction = TokenAction.Pass;
+      isRollAgain = false;
+      notifyListeners();
+    } else if (diceNumber < 6 &&
+        countNumberOfSix == 2 &&
+        tokenAction != TokenAction.BonusPoint) {
+      print('3...');
+      countNumberOfSix = 0;
+      playerTurn = playerCode;
+      tokenAction = TokenAction.Pass;
+      isRollAgain = false;
+      diceNumber = 0;
+      notifyListeners();
+    } else if (dice < 6 && tokenAction != TokenAction.BonusPoint) {
+      print('4..');
       // switch user
-      countSixForTokens = 0;
+      countNumberOfSix = 0;
       playerTurn = playerCode;
+      tokenAction = TokenAction.Pass;
+      isRollAgain = false;
+      notifyListeners();
+    } else {
+      print('rolled again');
     }
   }
 
@@ -154,14 +187,17 @@ class StateModel extends Model {
           tokenId: blueTokenId,
           currentLocation: 0);
     } else {
+      tokenAction = TokenAction.Pass;
       if (currentLocation.currentPosition >= 0 &&
           (number + currentLocation.currentPosition) < 55) {
+        print('under 55 blue');
         updateCurrentLocationForBlue(
             movesForBluePath[currentLocation.currentPosition + number],
             currentLocation: currentLocation.currentPosition + number,
             tokenId: blueTokenId);
       } else if (number + currentLocation.currentPosition == 56) {
-        tokenAction = TokenAction.SpecialHome;
+        tokenAction = TokenAction.BonusPoint;
+        isRollAgain = true;
         print('home');
         updateCurrentLocationForBlue(
             movesForBluePath[currentLocation.currentPosition + number - 1],
@@ -172,16 +208,19 @@ class StateModel extends Model {
     }
 
     // if only token does not do this action than no need to call
-    print('token action ${tokenAction}');
-    if (tokenAction != TokenAction.Killed ||
-        tokenAction != TokenAction.SpecialHome)
-      switchUserTurn(number, playerCode: PlayerCode.YELLOW);
 
+    print('token action blue to green ${playingBoard}');
+    switchUserTurn(number,
+        playerCode: playingBoard == PlayingBoard.GREEN_BLUE
+            ? PlayerCode.GREEN
+            : PlayerCode.YELLOW);
+    diceNumber = 0;
     notifyListeners();
   }
 
   void updateCurrentLocationForBlue(MoveForBlue moveForBlue,
       {int currentLocation, int tokenId, PlayerCode playerCode}) {
+    bool isTwice = false;
     print('plaer code $playerCode');
     CurrentBlueTravelingPath blue = CurrentBlueTravelingPath(
         currentPosition: currentLocation,
@@ -190,6 +229,42 @@ class StateModel extends Model {
         playerCode: playerCode ?? moveForBlue.playerCode,
         tokenId: tokenId);
     currentLocationBlueToken[tokenId] = blue;
+    List<CurrentBlueTravelingPath> _list = [];
+    currentLocationBlueToken.forEach((k, v) {
+      _list.add(v);
+    });
+
+    // This logic is for to check if tokens are in paired or not.
+    // for (int i = 0; i < _list.length - 1; i++) {
+    //   for (int j = i + 1; j < _list.length; j++) {
+    //     if (_list[i].index1 == _list[j].index1 &&
+    //         _list[i].index2 == _list[j].index2 &&
+    //         _list[i].playerCode != PlayerCode.HOME &&
+    //         _list[j].playerCode != PlayerCode.HOME &&
+    //         _list[i].playerCode != PlayerCode.STAR &&
+    //         _list[j].playerCode != PlayerCode.STAR) {
+    //       isTwice = true;
+    //       currentLocationBlueToken[i] = CurrentBlueTravelingPath(
+    //           currentPosition: currentLocation,
+    //           index1: moveForBlue.index1,
+    //           index2: moveForBlue.index2,
+    //           playerCode: playerCode ?? moveForBlue.playerCode,
+    //           tokenId: tokenId,
+    //           isTwice: true);
+    //       currentLocationBlueToken[j] = CurrentBlueTravelingPath(
+    //           currentPosition: currentLocation,
+    //           index1: moveForBlue.index1,
+    //           index2: moveForBlue.index2,
+    //           playerCode: playerCode ?? moveForBlue.playerCode,
+    //           tokenId: tokenId,
+    //           isTwice: true);
+    //       break;
+    //     }
+    //   }
+    //   if (isTwice) {
+    //     break;
+    //   }
+    // }
     if (moveForBlue.isSpecialPosition == false)
       tokenKillingFromBlueToken(
           index1: moveForBlue.index1,
@@ -211,28 +286,43 @@ class StateModel extends Model {
           currentLocation: 0,
           tokenId: yellowTokenId);
     } else {
+      print('yellw ${currentLocation.currentPosition}');
+      tokenAction = TokenAction.Pass;
       if (currentLocation.currentPosition >= 0 &&
           (number + currentLocation.currentPosition) < 55) {
+        print('yellw undre 55');
         updateCurrentLocationForYellow(
           movesForYellowPath[currentLocation.currentPosition + number],
           currentLocation: currentLocation.currentPosition + number,
           tokenId: yellowTokenId,
         );
-      } else if (number + currentLocation.currentPosition == 56) {
+         isOutOfRange=false;
+      }
+
+      /// if Token is inside color box
+      else if (number + currentLocation.currentPosition == 56) {
         print('home');
-        tokenAction = TokenAction.SpecialHome;
+        tokenAction = TokenAction.BonusPoint;
         updateCurrentLocationForYellow(
           movesForYellowPath[currentLocation.currentPosition + number - 1],
           currentLocation: currentLocation.currentPosition + number - 1,
           playerCode: PlayerCode.YELLOWHOME,
           tokenId: yellowTokenId,
         );
+         isOutOfRange=false;
+      } else if (number + currentLocation.currentPosition > 56) {
+        print('click in out of range');
+        isOutOfRange=true;
       }
     }
-    if (tokenAction != TokenAction.Killed ||
-        tokenAction != TokenAction.SpecialHome)
-      switchUserTurn(number, playerCode: PlayerCode.GREEN);
-
+    print('token action yellow to red ${tokenAction}');
+     if (!isOutOfRange)
+    switchUserTurn(number,
+        playerCode: playingBoard == PlayingBoard.RED_YELLOW
+            ? PlayerCode.RED
+            : PlayerCode.GREEN);
+    // switchUserTurn(number, playerCode: PlayerCode.GREEN);
+    diceNumber = 0;
     notifyListeners();
   }
 
@@ -250,6 +340,8 @@ class StateModel extends Model {
         playerCode: moveForYellow.playerCode);
   }
 
+  bool isOutOfRange = false;
+
   /// traveling logic for green
   void moveForGreen(int number,
       {CurrentGreenTravelingPath currentLocation, int tokenId}) {
@@ -263,17 +355,20 @@ class StateModel extends Model {
           ),
           tokenId: tokenId,
           currentLocation: 0);
+      isOutOfRange = false;
     } else {
+      tokenAction = TokenAction.Pass;
       if (currentLocation.currentPosition >= 0 &&
           (number + currentLocation.currentPosition) < 55) {
+        isOutOfRange = false;
         updateCurrentLocationForGreen(
             movesForGreenPath[currentLocation.currentPosition + number],
             currentLocation: currentLocation.currentPosition + number,
             tokenId: tokenId);
       } else if (number + currentLocation.currentPosition == 56) {
+        isOutOfRange = true;
         print('home');
-        print('home');
-        tokenAction = TokenAction.SpecialHome;
+        tokenAction = TokenAction.BonusPoint;
         updateCurrentLocationForGreen(
             movesForGreenPath[currentLocation.currentPosition + number - 1],
             currentLocation: currentLocation.currentPosition + number - 1,
@@ -281,10 +376,15 @@ class StateModel extends Model {
             playerCode: PlayerCode.GREENHOME);
       }
     }
-    if (tokenAction != TokenAction.Killed ||
-        tokenAction != TokenAction.SpecialHome)
-      switchUserTurn(number, playerCode: PlayerCode.RED);
+    print('green to red');
+    if (!isOutOfRange)
+      switchUserTurn(number,
+          playerCode: playingBoard == PlayingBoard.GREEN_BLUE
+              ? PlayerCode.BLUE
+              : PlayerCode.RED);
+    // switchUserTurn(number, playerCode: PlayerCode.RED);
 
+    diceNumber = 0;
     notifyListeners();
   }
 
@@ -316,6 +416,7 @@ class StateModel extends Model {
           currentLocation: 0,
           tokenId: tokenId);
     } else {
+      tokenAction = TokenAction.Pass;
       if (currentLocation.currentPosition >= 0 &&
           (number + currentLocation.currentPosition) < 55) {
         updateCurrentLocationForRed(
@@ -325,7 +426,7 @@ class StateModel extends Model {
         );
       } else if (number + currentLocation.currentPosition == 56) {
         print('home');
-        tokenAction = TokenAction.SpecialHome;
+        tokenAction = TokenAction.BonusPoint;
         updateCurrentLocationForRed(
           movesForRedPath[currentLocation.currentPosition + number - 1],
           currentLocation: currentLocation.currentPosition + number - 1,
@@ -334,9 +435,13 @@ class StateModel extends Model {
         );
       }
     }
-    if (tokenAction != TokenAction.Killed ||
-        tokenAction != TokenAction.SpecialHome)
-      switchUserTurn(number, playerCode: PlayerCode.BLUE);
+
+    print('token action red to blue ${tokenAction}');
+    switchUserTurn(number,
+        playerCode: playingBoard == PlayingBoard.RED_YELLOW
+            ? PlayerCode.YELLOW
+            : PlayerCode.BLUE);
+    // switchUserTurn(number, playerCode: PlayerCode.BLUE);
 
     notifyListeners();
   }
@@ -409,7 +514,8 @@ class StateModel extends Model {
           v.index2 == index2 &&
           v.playerCode == playerCode &&
           playerCode != PlayerCode.STAR) {
-        tokenAction = TokenAction.Killed;
+        isRollAgain = true;
+        tokenAction = TokenAction.BonusPoint;
         print('true for blue $k');
         currentLocationBlueToken[k] = CurrentBlueTravelingPath(
           index1: -1,
@@ -427,7 +533,8 @@ class StateModel extends Model {
           v.playerCode == playerCode &&
           playerCode != PlayerCode.STAR) {
         print('trur for yellow $k');
-        tokenAction = TokenAction.Killed;
+        tokenAction = TokenAction.BonusPoint;
+        isRollAgain = true;
         currentLocationYellowToken[k] = CurrentYellowTravelingPath(
           index1: -1,
           index2: -1,
@@ -443,7 +550,8 @@ class StateModel extends Model {
           v.index2 == index2 &&
           v.playerCode == playerCode &&
           playerCode != PlayerCode.STAR) {
-        tokenAction = TokenAction.Killed;
+        tokenAction = TokenAction.BonusPoint;
+        isRollAgain = true;
         print('trur for green $k');
         currentLocationGreenToken[k] = CurrentGreenTravelingPath(
           index1: -1,
@@ -460,9 +568,9 @@ class StateModel extends Model {
           v.index2 == index2 &&
           v.playerCode == playerCode &&
           playerCode != PlayerCode.STAR) {
-        print('trur for yellow $k');
-
-        tokenAction = TokenAction.Killed;
+        print('true for yellow $k');
+        tokenAction = TokenAction.BonusPoint;
+        isRollAgain = true;
         currentLocationRedToken[k] = CurrentRedTravelingPath(
           index1: -1,
           index2: -1,
@@ -473,4 +581,4 @@ class StateModel extends Model {
   }
 }
 
-enum TokenAction { Killed, SpecialHome, Pass }
+enum TokenAction { BonusPoint, SpecialHome, Pass }

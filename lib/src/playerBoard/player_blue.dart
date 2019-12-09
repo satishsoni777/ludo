@@ -16,10 +16,32 @@ class BluePlayer extends StatelessWidget {
       if (currentBlueTravelingPath.playerCode == PlayerCode.HOME)
         return InkWell(
           onTap: () {
-               if(model.playerTurn==PlayerCode.BLUE && model.diceNumber==6)
-              model.moveForBlue(model.diceNumber,
-                  blueTokenId: tokenId,
-                  currentLocation: currentBlueTravelingPath);
+            int insideHome = 0, outFromGame = 0;
+            model.currentLocationBlueToken.forEach((k, v) {
+              if (v.playerCode == PlayerCode.HOME) {
+                insideHome++;
+              } else if (v.playerCode == PlayerCode.BLUEHOME) {
+                outFromGame++;
+              }
+            });
+            if (insideHome + outFromGame == 4) {
+              for (int i = 1; i <= model.currentLocationBlueToken.length; i++) {
+                if (model.currentLocationBlueToken[i].playerCode !=
+                    PlayerCode.BLUEHOME) {
+                  tokenId = i;
+                  break;
+                }
+              }
+            } else {
+              if (model.playerTurn == PlayerCode.BLUE &&
+                  model.diceNumber == 6 &&
+                  model.countNumberOfSix != 3) {
+                model.moveForBlue(model.diceNumber,
+                    blueTokenId: tokenId,
+                    currentLocation: currentBlueTravelingPath);
+                       model.diceNumber=0;
+              }
+            }
           },
           child: Container(
             margin: EdgeInsets.all(5),
@@ -78,50 +100,54 @@ class BluePlayer extends StatelessWidget {
               LayoutBuilder(
                 builder: (context, contr) {
                   return SizedBox(
-                    height: contr.maxHeight * .6,
-                    width: contr.maxHeight * .6,
-                    child: Container(
+                      height: contr.maxHeight * .6,
+                      width: contr.maxHeight * .6,
                       child: Container(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                _circle(
-                                    currentBlueTravelingPath:
-                                        model.currentLocationBlueToken[1],
-                                    tokenId: 1),
-                                _circle(
-                                    currentBlueTravelingPath:
-                                        model.currentLocationBlueToken[2],
-                                    tokenId: 2),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                _circle(
-                                    currentBlueTravelingPath:
-                                        model.currentLocationBlueToken[3],
-                                    tokenId: 3),
-                                _circle(
-                                    currentBlueTravelingPath:
-                                        model.currentLocationBlueToken[4],
-                                    tokenId: 4),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                      decoration: BoxDecoration(
-                          color: Colors.blue[600],
-                          border: Border.all(color: Colors.black54, width: 1)),
-                    ),
-                  );
+                          decoration: BoxDecoration(
+                              color: Colors.blue[600],
+                              border:
+                                  Border.all(color: Colors.black54, width: 1)),
+                          child: model.playingBoard == PlayingBoard.All ||
+                                  model.playingBoard == PlayingBoard.GREEN_BLUE
+                              ? Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: <Widget>[
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        _circle(
+                                            currentBlueTravelingPath: model
+                                                .currentLocationBlueToken[1],
+                                            tokenId: 1),
+                                        _circle(
+                                            currentBlueTravelingPath: model
+                                                .currentLocationBlueToken[2],
+                                            tokenId: 2),
+                                      ],
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: <Widget>[
+                                        _circle(
+                                            currentBlueTravelingPath: model
+                                                .currentLocationBlueToken[3],
+                                            tokenId: 3),
+                                        _circle(
+                                            currentBlueTravelingPath: model
+                                                .currentLocationBlueToken[4],
+                                            tokenId: 4),
+                                      ],
+                                    ),
+                                  ],
+                                )
+                              : Container()));
                 },
               ),
             ],

@@ -37,7 +37,6 @@ Widget moveToken(BuildContext context,
         (b.index1 == index1) &&
         (b.index2 == index2)) {
       count++;
-      print('count $count');
       token = b.tokenId;
       currentBlueTravelingPath = b;
       blueTokenChildren.add(BlueToken(

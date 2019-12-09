@@ -24,11 +24,10 @@ class RedToken extends StatelessWidget {
       child: FlatButton(
         child: Text(''),
         color: Colors.redAccent,
-        shape: CircleBorder(
-          side: BorderSide(color: Colors.black)
-        ),
+        shape: CircleBorder(side: BorderSide(color: Colors.black)),
         onPressed: () {
-          if (model.playerTurn == PlayerCode.RED)
+          print(model.diceNumber);
+          if (model.playerTurn == PlayerCode.RED && model.diceNumber != 0)
             model.moveForRed(model.diceNumber,
                 tokenId: tokenId, currentLocation: redTravelingPath);
         },

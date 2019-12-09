@@ -16,10 +16,31 @@ class RedPlayer extends StatelessWidget {
       if (currentRedTravelingPath.playerCode == PlayerCode.HOME)
         return InkWell(
           onTap: () {
-             if(model.playerTurn==PlayerCode.RED && model.diceNumber==6)
-            model.moveForRed(model.diceNumber,
-                tokenId: tokenId,
-                currentLocation: currentRedTravelingPath);
+            int insideHome = 0, outFromGame = 0;
+            model.currentLocationRedToken.forEach((k, v) {
+              if (v.playerCode == PlayerCode.HOME) {
+                insideHome++;
+              } else if (v.playerCode == PlayerCode.BLUEHOME) {
+                outFromGame++;
+              }
+            });
+            if (insideHome + outFromGame == 4) {
+              for (int i = 1; i <= model.currentLocationRedToken.length; i++) {
+                if (model.currentLocationRedToken[i].playerCode !=
+                    PlayerCode.BLUEHOME) {
+                  tokenId = i;
+                  break;
+                }
+              }
+            } else {
+              if (model.playerTurn == PlayerCode.RED &&
+                  model.diceNumber == 6 &&
+                  model.countNumberOfSix != 3) {
+                model.moveForRed(model.diceNumber,
+                    tokenId: tokenId, currentLocation: currentRedTravelingPath);
+                    model.diceNumber=0;
+              }
+            }
           },
           child: Container(
             margin: EdgeInsets.all(5),
@@ -52,27 +73,27 @@ class RedPlayer extends StatelessWidget {
                   border: Border.all(color: Colors.black45, width: 1),
                   color: Colors.red),
             ),
-               Positioned(
-                top: 0,
-                child: Container(
-                  child: Row(
-                      children: model.currentLocationRedToken.values.map((s) {
-                    if (s.playerCode == PlayerCode.REDHOME)
-                      return Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Container(
-                          height: 25,
-                          width: 25,
-                          decoration: BoxDecoration(
-                              color: Colors.redAccent,
-                              borderRadius: BorderRadius.circular(12.5)),
-                        ),
-                      );
-                    else
-                      return Container();
-                  }).toList(growable: false)),
-                ),
+            Positioned(
+              top: 0,
+              child: Container(
+                child: Row(
+                    children: model.currentLocationRedToken.values.map((s) {
+                  if (s.playerCode == PlayerCode.REDHOME)
+                    return Padding(
+                      padding: const EdgeInsets.all(2.0),
+                      child: Container(
+                        height: 25,
+                        width: 25,
+                        decoration: BoxDecoration(
+                            color: Colors.redAccent,
+                            borderRadius: BorderRadius.circular(12.5)),
+                      ),
+                    );
+                  else
+                    return Container();
+                }).toList(growable: false)),
               ),
+            ),
             LayoutBuilder(
               builder: (context, contr) {
                 return SizedBox(
@@ -86,7 +107,8 @@ class RedPlayer extends StatelessWidget {
                 );
               },
             ),
-            Container(
+              model.playingBoard == PlayingBoard.All ||
+                    model.playingBoard == PlayingBoard.RED_YELLOW? Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -121,7 +143,7 @@ class RedPlayer extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
+            ):Container(),
           ],
         );
       },

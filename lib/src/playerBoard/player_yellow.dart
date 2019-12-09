@@ -17,10 +17,38 @@ class YellowPlayer extends StatelessWidget {
       if (currentYellowTravelingPath.playerCode == PlayerCode.HOME)
         return InkWell(
           onTap: () {
-            if(model.playerTurn==PlayerCode.YELLOW && model.diceNumber==6)
-            model.moveForYellow(model.diceNumber,
-                yellowTokenId: tokenId,
-                currentLocation: currentYellowTravelingPath);
+            int insideHome = 0, outFromGame = 0;
+            model.currentLocationYellowToken.forEach((k, v) {
+              if (v.playerCode == PlayerCode.HOME) {
+                insideHome++;
+              } else if (v.playerCode == PlayerCode.BLUEHOME) {
+                outFromGame++;
+              }
+            });
+            if (insideHome + outFromGame == 4) {
+              for (int i = 1;
+                  i <= model.currentLocationYellowToken.length;
+                  i++) {
+                if (model.currentLocationYellowToken[i].playerCode !=
+                    PlayerCode.BLUEHOME) {
+                  tokenId = i;
+                  break;
+                }
+              }
+            } else {
+              if (model.playerTurn == PlayerCode.YELLOW &&
+                  model.diceNumber == 6 &&
+                  model.countNumberOfSix != 3) {
+                model.moveForYellow(model.diceNumber,
+                    yellowTokenId: tokenId,
+                    currentLocation: currentYellowTravelingPath);
+                       model.diceNumber=0;
+              }
+            }
+            // if(model.playerTurn==PlayerCode.YELLOW && model.diceNumber==6)
+            // model.moveForYellow(model.diceNumber,
+            //     yellowTokenId: tokenId,
+            //     currentLocation: currentYellowTravelingPath);
           },
           child: Container(
             margin: EdgeInsets.all(5),
@@ -89,7 +117,8 @@ class YellowPlayer extends StatelessWidget {
                 );
               },
             ),
-            Container(
+             model.playingBoard == PlayingBoard.All ||
+                    model.playingBoard == PlayingBoard.RED_YELLOW? Container(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -124,7 +153,7 @@ class YellowPlayer extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
+            ):Container(),
           ],
         );
       },
