@@ -353,7 +353,6 @@ class _DiceAnimatonState extends State<DiceAnimaton>
       model.diceNumber = diceNum;
       _diceRolled = false;
       setState(() {});
-      print('asdsadsda $countSix');
       if (model.countNumberOfSix == 3) {
         model.diceNumber = 0;
         Timer(Duration(seconds: 1), () {

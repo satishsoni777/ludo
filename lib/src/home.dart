@@ -84,6 +84,19 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(
                 height: 20,
               ),
+              Container(
+                height: 150,
+                width: 200,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.white,Colors.blue]
+                  ),
+                  borderRadius: BorderRadius.circular(10)
+                ),
+                child: InkWell(
+                  onTap: (){},
+                ),
+              ),
               InkWell(
                 onTap: () {
                   model.playingBoard = PlayingBoard.RED_YELLOW;
