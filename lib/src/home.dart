@@ -48,6 +48,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final model = ScopedModel.of<StateModel>(context);
     return Scaffold(
@@ -88,19 +93,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: 150,
                 width: 200,
                 decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [Colors.white,Colors.blue]
-                  ),
-                  borderRadius: BorderRadius.circular(10)
-                ),
+                    gradient:
+                        LinearGradient(colors: [Colors.white, Colors.blue]),
+                    borderRadius: BorderRadius.circular(10)),
                 child: InkWell(
-                  onTap: (){},
+                  onTap: () {},
                 ),
               ),
               InkWell(
                 onTap: () {
                   model.playingBoard = PlayingBoard.RED_YELLOW;
-                  model.playerTurn=PlayerCode.RED;
+                  model.playerTurn = PlayerCode.RED;
                   _player = Player.FOUR_PLAYER;
                   setState(() {});
                 },
